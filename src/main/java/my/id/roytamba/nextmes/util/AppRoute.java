@@ -10,7 +10,8 @@ package my.id.roytamba.nextmes.util;
  */
 public enum AppRoute {
     DASHBOARD("/view/pages/Dashboard.fxml"),
-    SETTINGS("/view/module/settings/Settings.fxml");
+    SETTINGS("/view/module/settings/Settings.fxml"),
+    MONITOR("/view/module/monitor/Monitor.fxml");
 
     private final String fxmlPath;
 

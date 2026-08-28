@@ -35,6 +35,8 @@ public class SidebarController {
     // @FXML
     // private Button btnDashboard;
     @FXML
+    private Button btnMonitor;
+    @FXML
     private Button btnSettings;
 
     private final String ACTIVE_STYLE = "-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;";
@@ -58,6 +60,12 @@ public class SidebarController {
     // }
 
     @FXML
+    public void goToMonitor(ActionEvent event) {
+        Router.navigate(AppRoute.MONITOR);
+        setActiveButton(btnMonitor);
+    }
+
+    @FXML
     public void goToSettings(ActionEvent event) {
         Router.navigate(AppRoute.SETTINGS);
         setActiveButton(btnSettings);
@@ -65,6 +73,7 @@ public class SidebarController {
 
     private void setActiveButton(Button activeButton) {
         // btnDashboard.setStyle(INACTIVE_STYLE);
+        btnMonitor.setStyle(INACTIVE_STYLE);
         btnSettings.setStyle(INACTIVE_STYLE);
         if(activeButton != null) {
             activeButton.setStyle(ACTIVE_STYLE);

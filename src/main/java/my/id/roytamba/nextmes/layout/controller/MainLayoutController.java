@@ -38,6 +38,8 @@ public class MainLayoutController {
 
         if ("Dashboard (Segera Hadir)".equals(defaultMenu)) {
             Router.navigate(AppRoute.DASHBOARD);
+        } else if ("Monitor".equals(defaultMenu)) {
+            Router.navigate(AppRoute.MONITOR);
         } else {
             Router.navigate(AppRoute.SETTINGS);
         }
