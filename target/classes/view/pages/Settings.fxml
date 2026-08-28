@@ -2,56 +2,150 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="my.id.roytamba.nextmes.settings.controller.SettingsController">
+<BorderPane style="-fx-background-color: #f8fafc;" 
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="my.id.roytamba.nextmes.layout.controller.SettingsController">
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="60.0">
+        <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-border-color: transparent transparent #e2e8f0 transparent;" BorderPane.alignment="CENTER">
             <padding>
-                <Insets left="30.0" />
+                <Insets left="20.0" right="20.0" />
             </padding>
-            <Label text="Pengaturan Sistem" styleClass="text-light" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <children>
+                <Label text="Pengaturan Sistem" textFill="#0f172a">
+                    <font>
+                        <Font name="Segoe UI Bold" size="18.0" />
+                    </font>
+                </Label>
+            </children>
         </HBox>
     </top>
+    
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
+        <TabPane style="-fx-background-color: transparent;" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
-                <Tab text="Tampilan">
-                    <VBox spacing="20.0">
-                        <padding>
-                            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                        </padding>
-                        <Label text="Konfigurasi Resolusi Aplikasi" styleClass="text-light" style="-fx-font-size: 16px;"/>
-                        
-                        <GridPane hgap="15.0" vgap="15.0">
-                            <columnConstraints>
-                                <ColumnConstraints prefWidth="150.0" />
-                                <ColumnConstraints prefWidth="250.0" />
-                            </columnConstraints>
-                            <Label text="Lebar Layar (Width):" styleClass="text-light" GridPane.rowIndex="0" />
-                            <TextField fx:id="txtAppWidth" text="1000" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                            
-                            <Label text="Tinggi Layar (Height):" styleClass="text-light" GridPane.rowIndex="1" />
-                            <TextField fx:id="txtAppHeight" text="650" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        </GridPane>
-                        
-                        <HBox spacing="10.0">
-                            <Button text="Simpan Tampilan" styleClass="btn-primary" onAction="#handleSaveAppearance">
-                                <padding>
-                                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                                </padding>
-                            </Button>
-                        </HBox>
-                    </VBox>
-                </Tab>
-
+                <!-- TAB 1: KONEKSI DATABASE -->
                 <Tab text="Koneksi Database">
-                    <VBox spacing="20.0">
-                        <padding>
-                            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                        </padding>
-                        <Label text="Konfigurasi Server Database" styleClass="text-light" style="-fx-font-size: 16px;"/>
-                    </VBox>
+                    <content>
+                        <VBox spacing="20.0">
+                            <padding>
+                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                            </padding>
+                            <children>
+                                <Label text="Konfigurasi Server Database">
+                                    <font>
+                                        <Font name="Segoe UI Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                
+                                <GridPane hgap="15.0" vgap="15.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="120.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.0" minWidth="10.0" prefWidth="250.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <!-- Baris 0: Tipe Database -->
+                                        <Label text="Tipe Database:" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="cmbDbType" prefWidth="350.0" promptText="Pilih Database" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        
+                                        <!-- Baris 1: Host IP -->
+                                        <Label text="Host IP:" GridPane.rowIndex="1" />
+                                        <TextField fx:id="txtHost" promptText="localhost" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        
+                                        <!-- Baris 2: Port -->
+                                        <Label text="Port:" GridPane.rowIndex="2" />
+                                        <TextField fx:id="txtPort" promptText="3306" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        
+                                        <!-- Baris 3: Nama Database -->
+                                        <Label text="Nama Database:" GridPane.rowIndex="3" />
+                                        <TextField fx:id="txtDb" promptText="db_aplikasi" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        
+                                        <!-- Baris 4: Username -->
+                                        <Label text="Username:" GridPane.rowIndex="4" />
+                                        <TextField fx:id="txtUser" promptText="root" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        
+                                        <!-- Baris 5: Password -->
+                                        <Label text="Password:" GridPane.rowIndex="5" />
+                                        <PasswordField fx:id="txtPass" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    </children>
+                                </GridPane>
+                                
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Button onAction="#handleTestConnection" style="-fx-background-color: #64748b; -fx-text-fill: white; -fx-cursor: hand;" text="Test Koneksi">
+                                            <padding>
+                                                <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                                            </padding>
+                                        </Button>
+                                        <Button onAction="#handleSaveDatabase" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Simpan Koneksi">
+                                            <padding>
+                                                <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                                            </padding>
+                                        </Button>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+                
+                <!-- Tab lainnya tetap sama -->
+                <Tab text="Tampilan">
+                    <content>
+                        <VBox spacing="20.0">
+                            <padding>
+                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                            </padding>
+                            <children>
+                                <Label text="Konfigurasi Tampilan Aplikasi">
+                                    <font>
+                                        <Font name="Segoe UI Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                
+                                <GridPane hgap="15.0" vgap="15.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="120.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.0" minWidth="10.0" prefWidth="250.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <!-- Baris 0: Lebar Layar -->
+                                        <Label text="Lebar Layar (Width):" GridPane.rowIndex="0" />
+                                        <TextField fx:id="txtAppWidth" promptText="1000" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        
+                                        <!-- Baris 1: Tinggi Layar -->
+                                        <Label text="Tinggi Layar (Height):" GridPane.rowIndex="1" />
+                                        <TextField fx:id="txtAppHeight" promptText="650" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        
+                                        <!-- Baris 2: Bahasa -->
+                                        <Label text="Bahasa:" GridPane.rowIndex="2" />
+                                        <ComboBox fx:id="cmbAppLang" prefWidth="350.0" promptText="Pilih Bahasa" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    </children>
+                                </GridPane>
+                                
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Button onAction="#handleSaveAppearance" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Simpan Tampilan">
+                                            <padding>
+                                                <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                                            </padding>
+                                        </Button>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+                
+                <Tab text="Hak Akses (RBAC)">
+                    <content>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <children>
+                                <Label text="Manajemen Role &amp; Permission (Segera Hadir)" textFill="#64748b" />
+                            </children>
+                        </VBox>
+                    </content>
                 </Tab>
             </tabs>
         </TabPane>

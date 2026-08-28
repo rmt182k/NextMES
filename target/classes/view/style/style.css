@@ -7,54 +7,80 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : roymt
 */
 
-/* style.css */
+/* style.css (AplikasiKu Theme) */
 .root {
-    -fx-background-color: #0f172a; /* Slate 900 - Hitam/Biru Gelap */
+    -fx-background-color: #f8fafc; /* Main area light background */
     -fx-font-family: 'Segoe UI', sans-serif;
 }
 
-/* --- Top Bar --- */
-.topbar {
-    -fx-background-color: #020617; /* Lebih gelap dari background */
-    -fx-border-color: transparent transparent #1e293b transparent;
-    -fx-border-width: 1px;
+/* --- Brand Header (Top Left) --- */
+.brand-header {
+    -fx-background-color: #0f172a; /* Sangat gelap untuk area brand */
 }
 
 .brand-text {
-    -fx-text-fill: #3b82f6; /* Blue 500 */
-    -fx-font-size: 20px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
 .toggle-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 18px;
     -fx-cursor: hand;
+    -fx-padding: 0;
 }
 .toggle-btn:hover {
+    -fx-background-color: #1e293b;
     -fx-text-fill: #ffffff;
 }
 
 /* --- Sidebar --- */
 .sidebar {
-    -fx-background-color: #020617;
-    -fx-border-color: transparent #1e293b transparent transparent;
-    -fx-border-width: 1px;
+    -fx-background-color: #1e293b; /* Biru/Abu gelap untuk sidebar */
 }
 
 .sidebar-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #cbd5e1; /* Abu terang untuk teks inaktif */
     -fx-alignment: BASELINE_LEFT;
     -fx-font-size: 14px;
-    -fx-padding: 12 20 12 20;
+    -fx-padding: 12 0 12 20;
     -fx-cursor: hand;
 }
 
+.sidebar-btn .label {
+    -fx-text-fill: inherit;
+}
+
 .sidebar-btn:hover, .sidebar-btn:focused {
-    -fx-background-color: #1e3a8a; /* Dark Blue Hover */
+    -fx-background-color: #334155; /* Hover state */
     -fx-text-fill: #ffffff;
+}
+
+/* Active State untuk Sidebar Button */
+.sidebar-btn.active {
+    -fx-background-color: #4f46e5; /* Ungu/Biru terang khas AplikasiKu */
+    -fx-text-fill: #ffffff;
+}
+
+/* --- Content Area --- */
+.content-area {
+    -fx-background-color: #f8fafc;
+}
+
+/* --- Content Header (Top Right) --- */
+.content-header {
+    -fx-background-color: #ffffff; /* Putih bersih */
+    -fx-border-color: transparent transparent #e2e8f0 transparent;
+    -fx-border-width: 1px;
+}
+
+.page-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
 }
 
 /* --- TabPane & Content --- */
@@ -62,16 +88,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: transparent;
 }
 .tab {
-    -fx-background-color: #1e293b;
+    -fx-background-color: #e2e8f0;
 }
 .tab .tab-label {
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #475569;
 }
 .tab:selected {
-    -fx-background-color: #3b82f6;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1 #cbd5e1 transparent #cbd5e1;
+    -fx-border-width: 1px;
 }
 .tab:selected .tab-label {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: bold;
 }
 .tab-content-area {
     -fx-background-color: transparent;
@@ -79,29 +108,37 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 /* --- Label & Input & Button --- */
 .text-light {
-    -fx-text-fill: #f8fafc;
+    -fx-text-fill: #0f172a; 
 }
 .text-muted {
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #64748b;
 }
 .text-field, .combo-box, .password-field {
-    -fx-background-color: #1e293b;
-    -fx-text-fill: #f8fafc;
-    -fx-border-color: #334155;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: #cbd5e1;
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
 }
 .btn-primary {
-    -fx-background-color: #2563eb;
+    -fx-background-color: #10b981; /* Emerald/Hijau */
     -fx-text-fill: white;
     -fx-cursor: hand;
     -fx-background-radius: 4px;
+    -fx-padding: 6 16 6 16;
 }
 .btn-primary:hover {
-    -fx-background-color: #1d4ed8;
+    -fx-background-color: #059669;
 }
 .btn-secondary {
-    -fx-background-color: #475569;
-    -fx-text-fill: white;
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
     -fx-cursor: hand;
+    -fx-padding: 6 16 6 16;
+}
+.btn-secondary:hover {
+    -fx-background-color: #e2e8f0;
 }

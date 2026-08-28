@@ -4,15 +4,19 @@
  */
 package my.id.roytamba.nextmes.layout.controller;
 
+import my.id.roytamba.nextmes.util.AppRoute;
+import my.id.roytamba.nextmes.util.Router;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import java.io.IOException;
-import java.net.URL;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  *
@@ -21,50 +25,88 @@ import java.net.URL;
 public class SidebarController {
 
     @FXML
-    private Button btnDashboard;
+    private VBox sidebar;
     @FXML
-    private Button btnProduction;
+    private Label lblBrand;
+    @FXML
+    private Region spacer; // Mengontrol ruang pendorong di header
+    @FXML
+    private Button btnToggle;
+    // @FXML
+    // private Button btnDashboard;
     @FXML
     private Button btnSettings;
 
-    @FXML
-    private void goToDashboard(ActionEvent event) {
-        // Asumsi kamu sudah punya file Dashboard.fxml
-        loadView("/view/layout/Dashboard.fxml", event);
-    }
+    private final String ACTIVE_STYLE = "-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;";
+    private final String INACTIVE_STYLE = "-fx-background-color: transparent; -fx-text-fill: #cbd5e1; -fx-cursor: hand;";
+
+    private boolean isExpanded = true;
+    private final double EXPANDED_WIDTH = 220.0;
+
+    // 60.0 adalah angka emas (20px padding kiri + 20px icon + sisa 20px kanan = sempurna di tengah)
+    private final double COLLAPSED_WIDTH = 60.0;
 
     @FXML
-    private void goToSettings(ActionEvent event) {
-        // Memuat file Settings.fxml yang tadi kita buat
-        loadView("/view/pages/Settings.fxml", event);
+    public void initialize() {
+        setActiveButton(btnSettings);
     }
 
-    /**
-     * Method reusable untuk memuat FXML dan memasukkannya ke bagian tengah
-     * (Center) MainLayout
-     */
-    private void loadView(String fxmlPath, ActionEvent event) {
-        try {
-            URL fxmlLocation = getClass().getResource(fxmlPath);
-            if (fxmlLocation == null) {
-                System.err.println("File FXML tidak ditemukan: " + fxmlPath);
-                return;
-            }
+    // @FXML
+    // public void goToDashboard(ActionEvent event) {
+    //     Router.navigate(AppRoute.DASHBOARD);
+    //     setActiveButton(btnDashboard);
+    // }
 
-            // Load file FXML tujuan
-            Parent newView = FXMLLoader.load(fxmlLocation);
+    @FXML
+    public void goToSettings(ActionEvent event) {
+        Router.navigate(AppRoute.SETTINGS);
+        setActiveButton(btnSettings);
+    }
 
-            // Mendapatkan komponen node yang memicu event (Tombol Sidebar)
-            Node sourceNode = (Node) event.getSource();
-
-            // Mengambil root layout (MainLayout.fxml) yang merupakan BorderPane
-            BorderPane mainLayout = (BorderPane) sourceNode.getScene().getRoot();
-
-            // Mengganti konten yang ada di posisi <center> dengan view baru
-            mainLayout.setCenter(newView);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void setActiveButton(Button activeButton) {
+        // btnDashboard.setStyle(INACTIVE_STYLE);
+        btnSettings.setStyle(INACTIVE_STYLE);
+        if(activeButton != null) {
+            activeButton.setStyle(ACTIVE_STYLE);
         }
+    }
+
+    @FXML
+    public void toggleSidebar(ActionEvent event) {
+        if (isExpanded) {
+            // --- PROSES COLLAPSE (TUTUP) ---
+            lblBrand.setVisible(false);
+            lblBrand.setManaged(false);
+            spacer.setManaged(false); // Matikan ruang kosong agar tombol toggle menempel ke padding kiri
+
+            // Perintahkan JavaFX untuk hanya menampilkan icon, sembunyikan teksnya
+            // btnDashboard.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            btnSettings.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+            animateSidebar(COLLAPSED_WIDTH);
+            isExpanded = false;
+
+        } else {
+            // --- PROSES EXPAND (BUKA) ---
+            lblBrand.setVisible(true);
+            lblBrand.setManaged(true);
+            spacer.setManaged(true);
+
+            // Perintahkan JavaFX untuk kembali menampilkan Icon di sebelah Kiri teks
+            // btnDashboard.setContentDisplay(ContentDisplay.LEFT);
+            btnSettings.setContentDisplay(ContentDisplay.LEFT);
+
+            animateSidebar(EXPANDED_WIDTH);
+            isExpanded = true;
+        }
+    }
+
+    private void animateSidebar(double targetWidth) {
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(sidebar.prefWidthProperty(), targetWidth)
+                )
+        );
+        timeline.play();
     }
 }

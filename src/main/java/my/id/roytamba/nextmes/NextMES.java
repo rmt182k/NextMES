@@ -23,8 +23,22 @@ public class NextMES extends Application {
             URL fxmlLocation = getClass().getResource("/view/layout/MainLayout.fxml");
             Parent root = FXMLLoader.load(fxmlLocation);
 
-            // Default fallback size (Nantinya bisa ditarik dari config.properties)
-            Scene scene = new Scene(root, 1000, 650);
+            // Load size from config.properties
+            double width = 1000;
+            double height = 650;
+            java.io.File configFile = new java.io.File("src/main/resources/config.properties");
+            if (configFile.exists()) {
+                try (java.io.FileInputStream in = new java.io.FileInputStream(configFile)) {
+                    java.util.Properties props = new java.util.Properties();
+                    props.load(in);
+                    width = Double.parseDouble(props.getProperty("ui.width", "1000"));
+                    height = Double.parseDouble(props.getProperty("ui.height", "650"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Scene scene = new Scene(root, width, height);
 
             primaryStage.setTitle("NextMES - Sistem Manajemen Terpadu");
             primaryStage.setScene(scene);

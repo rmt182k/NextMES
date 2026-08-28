@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.settings.controller.SettingsController">
+    
+    <top>
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20;" text="Pengaturan Sistem" BorderPane.alignment="CENTER_LEFT" />
+    </top>
+    
+    <center>
+        <TabPane style="-fx-background-color: transparent;" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+                <!-- TAB TAMPILAN (APPEARANCE) -->
+                <Tab text="Tampilan">
+                    <content>
+                        <fx:include source="appearance/Appearance.fxml" />
+                    </content>
+                </Tab>
+                
+                <!-- TAB MANAJEMEN MENU -->
+                <Tab text="Manajemen Menu">
+                    <content>
+                        <fx:include source="menu/MenuSettings.fxml" />
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>
