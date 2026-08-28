@@ -1,7 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package my.id.roytamba.nextmes;
 
 import java.net.URL;
@@ -24,8 +23,10 @@ public class NextMES extends Application {
             URL fxmlLocation = getClass().getResource("/view/layout/MainLayout.fxml");
             Parent root = FXMLLoader.load(fxmlLocation);
 
-            Scene scene = new Scene(root, 1000, 650); // Ukuran standar Desktop
-            primaryStage.setTitle("Sistem Manajemen Terpadu");
+            // Default fallback size (Nantinya bisa ditarik dari config.properties)
+            Scene scene = new Scene(root, 1000, 650);
+
+            primaryStage.setTitle("NextMES - Sistem Manajemen Terpadu");
             primaryStage.setScene(scene);
             primaryStage.show();
 
