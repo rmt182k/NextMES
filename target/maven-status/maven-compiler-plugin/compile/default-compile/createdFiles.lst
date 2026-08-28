@@ -1,9 +1,11 @@
 my\id\roytamba\nextmes\module\monitor\plc\controller\PlcMonitorController$PlcData.class
 my\id\roytamba\nextmes\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\util\ViewManager.class
+my\id\roytamba\nextmes\module\settings\plc\model\PlcModel.class
 my\id\roytamba\nextmes\module\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\module\settings\appearance\controller\AppearanceController.class
 my\id\roytamba\nextmes\module\monitor\plc\controller\PlcMonitorController.class
+my\id\roytamba\nextmes\module\settings\plc\controller\PlcMasterController.class
 my\id\roytamba\nextmes\util\Router.class
 my\id\roytamba\nextmes\module\settings\menu\controller\MenuSettingsController.class
 my\id\roytamba\nextmes\layout\controller\MainLayoutController.class

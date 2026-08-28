@@ -27,6 +27,13 @@
                         <fx:include source="menu/MenuSettings.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB MASTER PLC -->
+                <Tab text="Master PLC">
+                    <content>
+                        <fx:include source="plc/PlcMaster.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>
