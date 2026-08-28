@@ -40,7 +40,7 @@ public class NextMES extends Application {
 
             Scene scene = new Scene(root, width, height);
 
-            primaryStage.setTitle("NextMES - Sistem Manajemen Terpadu");
+            primaryStage.setTitle("NextMES");
             primaryStage.setScene(scene);
             primaryStage.show();
 
