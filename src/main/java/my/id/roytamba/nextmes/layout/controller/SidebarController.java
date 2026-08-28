@@ -50,7 +50,23 @@ public class SidebarController {
 
     @FXML
     public void initialize() {
-        setActiveButton(btnSettings);
+        String defaultMenu = "Pengaturan";
+        java.io.File configFile = new java.io.File("src/main/resources/config.properties");
+        if (configFile.exists()) {
+            try (java.io.FileInputStream in = new java.io.FileInputStream(configFile)) {
+                java.util.Properties props = new java.util.Properties();
+                props.load(in);
+                defaultMenu = props.getProperty("ui.default_menu", "Pengaturan");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if ("Monitor".equals(defaultMenu)) {
+            setActiveButton(btnMonitor);
+        } else {
+            setActiveButton(btnSettings);
+        }
     }
 
     // @FXML
@@ -90,6 +106,7 @@ public class SidebarController {
 
             // Perintahkan JavaFX untuk hanya menampilkan icon, sembunyikan teksnya
             // btnDashboard.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            btnMonitor.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             btnSettings.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
             animateSidebar(COLLAPSED_WIDTH);
@@ -103,6 +120,7 @@ public class SidebarController {
 
             // Perintahkan JavaFX untuk kembali menampilkan Icon di sebelah Kiri teks
             // btnDashboard.setContentDisplay(ContentDisplay.LEFT);
+            btnMonitor.setContentDisplay(ContentDisplay.LEFT);
             btnSettings.setContentDisplay(ContentDisplay.LEFT);
 
             animateSidebar(EXPANDED_WIDTH);
