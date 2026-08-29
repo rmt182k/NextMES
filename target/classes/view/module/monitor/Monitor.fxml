@@ -20,6 +20,13 @@
                         <fx:include source="plc/PlcMonitor.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB MES PC -->
+                <Tab text="MES PC">
+                    <content>
+                        <fx:include source="pc/PcMonitor.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>

@@ -1,10 +1,13 @@
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\layout\controller\MainLayoutController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\layout\controller\SidebarController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\monitor\controller\MonitorController.java
+C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\monitor\pc\controller\PcMonitorController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\monitor\plc\controller\PlcMonitorController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\appearance\controller\AppearanceController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\controller\SettingsController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\menu\controller\MenuSettingsController.java
+C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\pc\controller\PcMasterController.java
+C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\pc\model\PcModel.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\plc\controller\PlcMasterController.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\module\settings\plc\model\PlcModel.java
 C:\Users\roymt\Documents\NetBeansProjects\NextMES\src\main\java\my\id\roytamba\nextmes\NextMES.java

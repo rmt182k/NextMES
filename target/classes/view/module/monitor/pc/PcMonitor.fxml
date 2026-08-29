@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.monitor.pc.controller.PcMonitorController">
+    
+    <!-- HEADER -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
+            </padding>
+            <children>
+                <Label text="Kontrol &amp; Pencarian" textFill="#212529">
+                    <font>
+                        <Font name="Segoe UI Bold" size="18.0" />
+                    </font>
+                </Label>
+                
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <children>
+                        <Label text="Ping Interval (Detik):">
+                            <font>
+                                <Font name="Segoe UI" size="14.0" />
+                            </font>
+                        </Label>
+                        <Spinner fx:id="spinnerInterval" prefWidth="80.0" />
+                        
+                        <Label text="Search:">
+                            <font>
+                                <Font name="Segoe UI" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="15.0" />
+                            </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtSearch" prefWidth="200.0" promptText="Nama atau IP..." />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+    
+    <!-- CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #f0f2f5;" BorderPane.alignment="CENTER">
+            <content>
+                <VBox fx:id="mainContainer" spacing="20.0" style="-fx-background-color: transparent;">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+    
+</BorderPane>

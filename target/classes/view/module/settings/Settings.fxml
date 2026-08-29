@@ -34,6 +34,13 @@
                         <fx:include source="plc/PlcMaster.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB MASTER PC -->
+                <Tab text="Master PC">
+                    <content>
+                        <fx:include source="pc/PcMaster.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>
