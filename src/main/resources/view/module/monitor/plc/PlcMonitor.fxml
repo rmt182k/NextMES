@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
@@ -36,6 +37,16 @@
                             </font>
                         </Label>
                         <Spinner fx:id="spinnerInterval" prefWidth="80.0" />
+                        
+                        <Label text="Kategori:">
+                            <font>
+                                <Font name="Segoe UI" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="15.0" />
+                            </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cmbCategory" prefWidth="150.0" promptText="Semua" />
                         
                         <Label text="Search:">
                             <font>

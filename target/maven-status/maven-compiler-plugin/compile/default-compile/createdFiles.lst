@@ -1,7 +1,10 @@
+my\id\roytamba\nextmes\module\monitor\dctool\controller\DcToolMonitorController.class
 my\id\roytamba\nextmes\module\monitor\plc\controller\PlcMonitorController$PlcData.class
+my\id\roytamba\nextmes\module\monitor\dctool\controller\DcToolMonitorController$DcToolData.class
 my\id\roytamba\nextmes\util\ViewManager.class
 my\id\roytamba\nextmes\module\generator\formatter\controller\WoFormatterController.class
 my\id\roytamba\nextmes\module\settings\plc\model\PlcModel.class
+my\id\roytamba\nextmes\module\settings\dctool\controller\DcToolMasterController.class
 my\id\roytamba\nextmes\module\monitor\printer\controller\PrinterMonitorController.class
 my\id\roytamba\nextmes\module\settings\pc\controller\PcMasterController$DetailRow.class
 my\id\roytamba\nextmes\module\settings\controller\SettingsController.class
@@ -12,6 +15,7 @@ my\id\roytamba\nextmes\module\generator\excel\controller\ExcelGeneratorControlle
 my\id\roytamba\nextmes\layout\controller\MainLayoutController.class
 my\id\roytamba\nextmes\layout\controller\SidebarController.class
 my\id\roytamba\nextmes\module\monitor\pc\controller\PcMonitorController$PcData.class
+my\id\roytamba\nextmes\module\settings\dctool\model\DcToolModel.class
 my\id\roytamba\nextmes\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\module\monitor\pc\controller\PcMonitorController.class
 my\id\roytamba\nextmes\module\settings\pc\model\PcModel.class

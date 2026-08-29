@@ -48,6 +48,13 @@
                         <fx:include source="printer/PrinterMaster.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB MASTER DC TOOL -->
+                <Tab text="Master DC Tool">
+                    <content>
+                        <fx:include source="dctool/DcToolMaster.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>

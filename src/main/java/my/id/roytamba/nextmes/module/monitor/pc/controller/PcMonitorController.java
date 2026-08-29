@@ -23,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
@@ -50,6 +51,8 @@ public class PcMonitorController {
     @FXML
     private TextField txtSearch;
     @FXML
+    private ComboBox<String> cmbCategory;
+    @FXML
     private VBox mainContainer;
 
     private final String PC_PROPS_PATH = "src/main/resources/pc.properties";
@@ -71,7 +74,10 @@ public class PcMonitorController {
             restartMonitoring();
         });
 
-        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> filterPC(newVal));
+        cmbCategory.getItems().add("Semua");
+        cmbCategory.getSelectionModel().selectFirst();
+        cmbCategory.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
 
         loadPCData();
         startMonitoring();
@@ -119,6 +125,7 @@ public class PcMonitorController {
         }
 
         for (Map.Entry<String, List<PcData>> entry : categoryMap.entrySet()) {
+            cmbCategory.getItems().add(entry.getKey());
             createCategoryUI(entry.getKey(), entry.getValue());
         }
     }
@@ -296,10 +303,22 @@ public class PcMonitorController {
         return true;
     }
 
-    private void filterPC(String query) {
-        String[] keywords = query.toLowerCase().trim().split("\\s+");
+    private void applyFilters() {
+        String query = txtSearch.getText();
+        String[] keywords = query == null ? new String[0] : query.toLowerCase().trim().split("\\s+");
+        String selectedCategory = cmbCategory.getValue();
+        boolean filterByCategory = selectedCategory != null && !"Semua".equals(selectedCategory);
 
         for (VBox wrapper : categoryWrappers) {
+            Label lblTitle = (Label) wrapper.getChildren().get(0);
+            String catName = lblTitle.getText();
+            
+            if (filterByCategory && !catName.equals(selectedCategory)) {
+                wrapper.setVisible(false);
+                wrapper.setManaged(false);
+                continue;
+            }
+
             FlowPane grid = (FlowPane) wrapper.getChildren().get(1);
             boolean hasVisibleCard = false;
 

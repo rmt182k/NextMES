@@ -1,4 +1,4 @@
-package my.id.roytamba.nextmes.module.monitor.printer.controller;
+package my.id.roytamba.nextmes.module.monitor.dctool.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,20 +30,20 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
-public class PrinterMonitorController {
+public class DcToolMonitorController {
 
     @FXML private Spinner<Integer> spinnerInterval;
     @FXML private TextField txtSearch;
     @FXML private ComboBox<String> cmbCategory;
     @FXML private VBox mainContainer;
 
-    private final String PRINTER_PROPS_PATH = "src/main/resources/printer.properties";
+    private final String DCTOOL_PROPS_PATH = "src/main/resources/dctool.properties";
     private Timeline monitoringTimer;
     private int pingIntervalMs = 5000;
     private ExecutorService executorService;
 
     private final List<VBox> categoryWrappers = new ArrayList<>();
-    private final List<VBox> allPrinterCards = new ArrayList<>();
+    private final List<VBox> allDcToolCards = new ArrayList<>();
 
     @FXML
     public void initialize() {
@@ -56,17 +56,20 @@ public class PrinterMonitorController {
             restartMonitoring();
         });
 
+        // Setup Category Filter
         cmbCategory.getItems().add("Semua");
         cmbCategory.getSelectionModel().selectFirst();
         cmbCategory.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+        
+        // Setup Search Listener
         txtSearch.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
 
-        loadPrinterData();
+        loadDcToolData();
         startMonitoring();
     }
 
-    private void loadPrinterData() {
-        File propFile = new File(PRINTER_PROPS_PATH);
+    private void loadDcToolData() {
+        File propFile = new File(DCTOOL_PROPS_PATH);
         if (!propFile.exists()) return;
 
         Properties props = new Properties();
@@ -74,30 +77,30 @@ public class PrinterMonitorController {
             props.load(fis);
         } catch (Exception e) { return; }
 
-        Map<String, List<PrinterData>> categoryMap = new LinkedHashMap<>();
+        Map<String, List<DcToolData>> categoryMap = new LinkedHashMap<>();
 
         List<String> keys = props.stringPropertyNames().stream()
-                .filter(k -> k.startsWith("printer.") && k.endsWith(".category"))
+                .filter(k -> k.startsWith("dctool.") && k.endsWith(".category"))
                 .collect(Collectors.toList());
 
         for (String key : keys) {
-            String idStr = key.substring(8, key.length() - 9);
-            String cat = props.getProperty("printer." + idStr + ".category");
-            String name = props.getProperty("printer." + idStr + ".name");
-            String ip = props.getProperty("printer." + idStr + ".ip");
+            String idStr = key.substring(7, key.length() - 9); // "dctool." = 7, ".category" = 9
+            String cat = props.getProperty("dctool." + idStr + ".category");
+            String name = props.getProperty("dctool." + idStr + ".name");
+            String ip = props.getProperty("dctool." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
-                categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PrinterData(name, ip));
+                categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new DcToolData(name, ip));
             }
         }
 
-        for (Map.Entry<String, List<PrinterData>> entry : categoryMap.entrySet()) {
+        for (Map.Entry<String, List<DcToolData>> entry : categoryMap.entrySet()) {
             cmbCategory.getItems().add(entry.getKey());
             createCategoryUI(entry.getKey(), entry.getValue());
         }
     }
 
-    private void createCategoryUI(String categoryName, List<PrinterData> printerList) {
+    private void createCategoryUI(String categoryName, List<DcToolData> dctoolList) {
         VBox wrapper = new VBox();
         wrapper.setSpacing(10);
         wrapper.setPadding(new Insets(0, 0, 20, 0));
@@ -110,10 +113,10 @@ public class PrinterMonitorController {
         flowGrid.setHgap(15);
         flowGrid.setVgap(15);
 
-        for (PrinterData printer : printerList) {
-            VBox card = createPrinterCard(printer.name, printer.ip);
+        for (DcToolData tool : dctoolList) {
+            VBox card = createDcToolCard(tool.name, tool.ip);
             flowGrid.getChildren().add(card);
-            allPrinterCards.add(card);
+            allDcToolCards.add(card);
         }
 
         wrapper.getChildren().addAll(lblTitle, flowGrid);
@@ -121,7 +124,7 @@ public class PrinterMonitorController {
         mainContainer.getChildren().add(wrapper);
     }
 
-    private VBox createPrinterCard(String name, String ip) {
+    private VBox createDcToolCard(String name, String ip) {
         VBox card = new VBox();
         card.setAlignment(Pos.CENTER);
         card.setSpacing(5);
@@ -130,7 +133,7 @@ public class PrinterMonitorController {
         card.setPrefSize(240, 130);
         card.setMaxSize(240, 130);
 
-        Label icon = new Label("🖨️"); // Icon Printer
+        Label icon = new Label("🔧"); // Icon wrench/screwing
         icon.setFont(Font.font("Segoe UI Emoji", 36));
 
         Label lblName = new Label(name);
@@ -210,7 +213,7 @@ public class PrinterMonitorController {
     }
 
     private void refreshStatus() {
-        for (VBox card : allPrinterCards) {
+        for (VBox card : allDcToolCards) {
             if (card.isVisible()) {
                 String ip = (String) card.getProperties().get("ip");
                 Label lblStatus = (Label) card.getProperties().get("statusLabel");
@@ -241,10 +244,10 @@ public class PrinterMonitorController {
         }
     }
 
-    private static class PrinterData {
+    private static class DcToolData {
         String name;
         String ip;
-        PrinterData(String name, String ip) {
+        DcToolData(String name, String ip) {
             this.name = name;
             this.ip = ip;
         }

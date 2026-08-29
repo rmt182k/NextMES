@@ -34,6 +34,13 @@
                         <fx:include source="printer/PrinterMonitor.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB DC TOOL -->
+                <Tab text="DC Tool">
+                    <content>
+                        <fx:include source="dctool/DcToolMonitor.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>

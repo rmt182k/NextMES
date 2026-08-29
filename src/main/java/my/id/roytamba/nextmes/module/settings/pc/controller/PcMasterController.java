@@ -58,6 +58,7 @@ public class PcMasterController {
     public void initialize() {
         cmbCategory.getItems().addAll("PAINT SHOP", "BODY SHOP", "GA SHOP", "Lainnya");
         cmbCategory.setValue("PAINT SHOP");
+        cmbCategory.setEditable(true);
 
         colId.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());

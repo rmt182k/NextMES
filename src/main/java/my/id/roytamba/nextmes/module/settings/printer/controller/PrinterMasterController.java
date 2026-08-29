@@ -41,6 +41,7 @@ public class PrinterMasterController {
         // Setup Kategori Default
         cmbCategory.getItems().addAll("PAINT SHOP", "BODY SHOP", "GA SHOP", "Lainnya");
         cmbCategory.setValue("PAINT SHOP");
+        cmbCategory.setEditable(true);
 
         // Setup Binding Tabel
         colId.setCellValueFactory(cellData -> cellData.getValue().idProperty());
