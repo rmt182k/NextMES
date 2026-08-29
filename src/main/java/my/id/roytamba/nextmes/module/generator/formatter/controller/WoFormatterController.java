@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -13,6 +15,7 @@ public class WoFormatterController {
     @FXML private TextArea txtInput;
     @FXML private TextArea txtOutput;
     @FXML private ComboBox<String> cmbBracket;
+    @FXML private Spinner<Integer> spinnerItemsPerLine;
 
     @FXML
     public void initialize() {
@@ -22,6 +25,10 @@ public class WoFormatterController {
                 "{ } - Braces"
         );
         cmbBracket.setValue("( ) - Parentheses");
+
+        // Set default value for Items per line (Min: 1, Max: 100, Default: 1)
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
+        spinnerItemsPerLine.setValueFactory(valueFactory);
     }
 
     @FXML
@@ -35,7 +42,6 @@ public class WoFormatterController {
         String[] lines = inputText.split("\\R");
         StringBuilder result = new StringBuilder();
 
-        // Tentukan karakter pembuka dan penutup
         String bracketChoice = cmbBracket.getValue();
         String openBracket = "(";
         String closeBracket = ")";
@@ -48,9 +54,13 @@ public class WoFormatterController {
             closeBracket = "}";
         }
 
-        result.append(openBracket).append("\n");
+        int itemsPerLine = spinnerItemsPerLine.getValue();
 
+        result.append(openBracket).append("\n    ");
+
+        int count = 0;
         boolean first = true;
+
         for (String line : lines) {
             String trimmed = line.trim();
             if (trimmed.isEmpty()) {
@@ -58,11 +68,16 @@ public class WoFormatterController {
             }
 
             if (!first) {
-                result.append(",\n");
+                if (count % itemsPerLine == 0) {
+                    result.append(",\n    ");
+                } else {
+                    result.append(", ");
+                }
             }
 
-            // Indentasi dan penambahan kutip tunggal
-            result.append("    '").append(trimmed).append("'");
+            result.append("'").append(trimmed).append("'");
+            
+            count++;
             first = false;
         }
 
