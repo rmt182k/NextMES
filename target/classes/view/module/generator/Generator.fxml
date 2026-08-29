@@ -20,6 +20,18 @@
                         <fx:include source="formatter/WoFormatter.fxml" />
                     </content>
                 </Tab>
+                <!-- TAB EXCEL TEMPLATE -->
+                <Tab text="Dynamic Template (Excel)">
+                    <content>
+                        <fx:include source="excel/ExcelGenerator.fxml" />
+                    </content>
+                </Tab>
+                <!-- TAB CUSTOM GRID -->
+                <Tab text="Custom Column (Array/JSON)">
+                    <content>
+                        <fx:include source="grid/GridGenerator.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.generator.excel.controller.ExcelGeneratorController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <center>
+        <SplitPane dividerPositions="0.6" orientation="HORIZONTAL" style="-fx-background-color: transparent;">
+            
+            <!-- LEFT: DATA GRID -->
+            <VBox spacing="10.0">
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <Label text="Data Mapping">
+                        <font>
+                            <Font name="Segoe UI Bold" size="16.0" />
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <CheckBox fx:id="chkFirstRowHeader" selected="true" text="Baris 1 adalah Header" />
+                    <Button onAction="#handlePaste" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand;" text="📋 Paste Data" />
+                    <Button onAction="#handleClear" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-cursor: hand;" text="🗑 Bersihkan" />
+                </HBox>
+                
+                <TableView fx:id="tableData" VBox.vgrow="ALWAYS" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 13px;" />
+            </VBox>
+
+            <!-- RIGHT: TEMPLATE & OUTPUT -->
+            <SplitPane dividerPositions="0.4" orientation="VERTICAL" style="-fx-background-color: transparent;">
+                
+                <!-- TEMPLATE INPUT -->
+                <VBox spacing="10.0">
+                    <Label text="Format Template">
+                        <font>
+                            <Font name="Segoe UI Bold" size="16.0" />
+                        </font>
+                    </Label>
+                    <Label text="Gunakan {NamaKolom} untuk merujuk ke data pada tabel." textFill="#64748b">
+                        <font>
+                            <Font name="Segoe UI" size="12.0" />
+                        </font>
+                    </Label>
+                    <TextArea fx:id="txtTemplate" promptText="Cth: UPDATE user SET name='{Nama}' WHERE id='{ID}';" VBox.vgrow="ALWAYS">
+                        <font>
+                            <Font name="Consolas" size="13.0" />
+                        </font>
+                    </TextArea>
+                    <Button maxWidth="Infinity" onAction="#handleGenerate" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 8;" text="🚀 Generate Script" />
+                </VBox>
+
+                <!-- OUTPUT -->
+                <VBox spacing="10.0">
+                    <Label text="Hasil Output">
+                        <font>
+                            <Font name="Segoe UI Bold" size="16.0" />
+                        </font>
+                    </Label>
+                    <TextArea fx:id="txtOutput" editable="false" VBox.vgrow="ALWAYS">
+                        <font>
+                            <Font name="Consolas" size="13.0" />
+                        </font>
+                    </TextArea>
+                </VBox>
+                
+            </SplitPane>
+        </SplitPane>
+    </center>
+</BorderPane>
