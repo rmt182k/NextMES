@@ -25,6 +25,18 @@
             <!-- TOP: CONFIG & COLUMNS -->
             <VBox spacing="10.0">
                 <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <Label text="Pilih Template:">
+                        <font>
+                            <Font name="Segoe UI Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <ComboBox fx:id="cmbTemplate" prefWidth="200.0" promptText="-- Template Baru --" />
+                    <Button onAction="#handleSaveTemplate" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-cursor: hand;" text="💾 Simpan Template" />
+                    <Button onAction="#handleRenameTemplate" style="-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-cursor: hand;" text="✏ Ganti Nama" />
+                    <Button onAction="#handleDeleteTemplate" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand;" text="🗑 Hapus" />
+                </HBox>
+                
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
                     <Label text="Jumlah Kolom:">
                         <font>
                             <Font name="Segoe UI Bold" size="14.0" />
@@ -52,6 +64,7 @@
                     <ComboBox fx:id="cmbFormat" prefWidth="200.0" />
                     <Button onAction="#handleGenerate" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" text="🚀 Generate Data" />
                     <Region HBox.hgrow="ALWAYS" />
+                    <Button onAction="#handleSaveToFile" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand;" text="💾 Simpan ke File" />
                     <Button onAction="#handleCopy" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-cursor: hand;" text="📋 Copy Output" />
                 </HBox>
                 
