@@ -1,7 +1,9 @@
 package my.id.roytamba.nextmes.module.monitor.pc.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -11,6 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -18,22 +21,31 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class PcMonitorController {
 
-    @FXML private Spinner<Integer> spinnerInterval;
-    @FXML private TextField txtSearch;
-    @FXML private VBox mainContainer;
+    @FXML
+    private Spinner<Integer> spinnerInterval;
+    @FXML
+    private TextField txtSearch;
+    @FXML
+    private VBox mainContainer;
 
     private final String PC_PROPS_PATH = "src/main/resources/pc.properties";
     private Timeline monitoringTimer;
@@ -62,27 +74,42 @@ public class PcMonitorController {
 
     private void loadPCData() {
         File propFile = new File(PC_PROPS_PATH);
-        if (!propFile.exists()) return;
+        if (!propFile.exists()) {
+            return;
+        }
 
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream(propFile)) {
             props.load(fis);
-        } catch (Exception e) { return; }
+        } catch (Exception e) {
+            return;
+        }
 
         Map<String, List<PcData>> categoryMap = new LinkedHashMap<>();
 
-        List<String> keys = props.stringPropertyNames().stream()
+        // Ambil semua ID PC secara unik
+        List<String> ids = props.stringPropertyNames().stream()
                 .filter(k -> k.startsWith("pc.") && k.endsWith(".category"))
+                .map(k -> k.substring(3, k.length() - 9))
+                .distinct()
                 .collect(Collectors.toList());
 
-        for (String key : keys) {
-            String idStr = key.substring(3, key.length() - 9);
-            String cat = props.getProperty("pc." + idStr + ".category");
-            String name = props.getProperty("pc." + idStr + ".name");
-            String ip = props.getProperty("pc." + idStr + ".ip");
+        for (String idStr : ids) {
+            String prefix = "pc." + idStr + ".";
+            String cat = props.getProperty(prefix + "category");
+            String name = props.getProperty(prefix + "name");
+            String ip = props.getProperty(prefix + "ip");
 
             if (cat != null && name != null && ip != null) {
-                categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PcData(name, ip));
+                // Kumpulkan seluruh sisa kolom untuk ditampung ke dalam map
+                Map<String, String> details = new LinkedHashMap<>();
+                for (String propName : props.stringPropertyNames()) {
+                    if (propName.startsWith(prefix)) {
+                        String propKey = propName.substring(prefix.length());
+                        details.put(propKey, props.getProperty(propName));
+                    }
+                }
+                categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PcData(name, ip, details));
             }
         }
 
@@ -105,7 +132,7 @@ public class PcMonitorController {
         flowGrid.setVgap(15);
 
         for (PcData pc : pcList) {
-            VBox card = createPcCard(pc.name, pc.ip);
+            VBox card = createPcCard(pc.name, pc.ip, pc.details);
             flowGrid.getChildren().add(card);
             allPcCards.add(card);
         }
@@ -115,16 +142,19 @@ public class PcMonitorController {
         mainContainer.getChildren().add(wrapper);
     }
 
-    private VBox createPcCard(String name, String ip) {
+    private VBox createPcCard(String name, String ip, Map<String, String> details) {
         VBox card = new VBox();
         card.setAlignment(Pos.CENTER);
         card.setSpacing(5);
         card.setPadding(new Insets(15, 10, 15, 10));
-        card.setStyle("-fx-background-color: white; -fx-border-color: #dcdcdc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        card.setStyle("-fx-background-color: white; -fx-border-color: #dcdcdc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;");
         card.setPrefSize(240, 130);
         card.setMaxSize(240, 130);
 
-        Label icon = new Label("💻"); // Icon PC
+        // Pass data detail langsung ke modal
+        card.setOnMouseClicked(e -> showDetailModal(name, ip, details));
+
+        Label icon = new Label("💻");
         icon.setFont(Font.font("Segoe UI Emoji", 36));
 
         Label lblName = new Label(name);
@@ -136,7 +166,7 @@ public class PcMonitorController {
 
         Label lblStatus = new Label("⏳ Checking...");
         lblStatus.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
-        lblStatus.setTextFill(Color.web("#f39c12")); 
+        lblStatus.setTextFill(Color.web("#f39c12"));
 
         card.getChildren().addAll(icon, lblName, lblIp, lblStatus);
 
@@ -147,10 +177,70 @@ public class PcMonitorController {
         return card;
     }
 
+    private void showDetailModal(String pcName, String ip, Map<String, String> details) {
+        Stage modalStage = new Stage();
+        modalStage.initModality(Modality.APPLICATION_MODAL);
+        modalStage.setTitle("Detail PC - " + pcName);
+
+        VBox layout = new VBox(15);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: white;");
+
+        Label title = new Label("Informasi Detail: " + pcName);
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+
+        Label lblIp = new Label("IP Address: " + ip);
+        lblIp.setFont(Font.font("Segoe UI", 14));
+        lblIp.setTextFill(Color.GRAY);
+
+        VBox detailsBox = new VBox(8);
+
+        if (details.isEmpty()) {
+            Label noData = new Label("Tidak ada data kolom untuk PC ini.");
+            noData.setFont(Font.font("Segoe UI", 14));
+            detailsBox.getChildren().add(noData);
+        } else {
+            for (Map.Entry<String, String> entry : details.entrySet()) {
+                // Abaikan key dasar karena sudah muncul di judul card
+                String key = entry.getKey();
+                if (key.equals("name") || key.equals("ip") || key.equals("category")) {
+                    continue;
+                }
+
+                Label lbl = new Label("• " + key + " : " + entry.getValue());
+                lbl.setFont(Font.font("Segoe UI", 13));
+                detailsBox.getChildren().add(lbl);
+            }
+        }
+
+        ScrollPane scroll = new ScrollPane(detailsBox);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: white;");
+        scroll.setPrefHeight(350);
+
+        Button btnRemote = new Button("Remote PC");
+        btnRemote.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+        btnRemote.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 8 15 8 15;");
+        btnRemote.setOnAction(e -> {
+            System.out.println("Membuka Remote PC untuk IP: " + ip);
+        });
+
+        HBox btnBox = new HBox(btnRemote);
+        btnBox.setAlignment(Pos.CENTER_RIGHT);
+
+        layout.getChildren().addAll(title, lblIp, scroll, btnBox);
+
+        Scene scene = new Scene(layout, 550, 550);
+        modalStage.setScene(scene);
+        modalStage.show();
+    }
+
     private boolean isSmartMatch(String text, String[] keywords) {
         String lower = text.toLowerCase();
         for (String kw : keywords) {
-            if (!lower.contains(kw)) return false;
+            if (!lower.contains(kw)) {
+                return false;
+            }
         }
         return true;
     }
@@ -171,9 +261,11 @@ public class PcMonitorController {
                 card.setVisible(match);
                 card.setManaged(match);
 
-                if (match) hasVisibleCard = true;
+                if (match) {
+                    hasVisibleCard = true;
+                }
             }
-            
+
             wrapper.setVisible(hasVisibleCard);
             wrapper.setManaged(hasVisibleCard);
         }
@@ -187,7 +279,9 @@ public class PcMonitorController {
     }
 
     private void restartMonitoring() {
-        if (monitoringTimer != null) monitoringTimer.stop();
+        if (monitoringTimer != null) {
+            monitoringTimer.stop();
+        }
         startMonitoring();
     }
 
@@ -224,11 +318,15 @@ public class PcMonitorController {
     }
 
     private static class PcData {
+
         String name;
         String ip;
-        PcData(String name, String ip) {
+        Map<String, String> details;
+
+        PcData(String name, String ip, Map<String, String> details) {
             this.name = name;
             this.ip = ip;
+            this.details = details;
         }
     }
 }
