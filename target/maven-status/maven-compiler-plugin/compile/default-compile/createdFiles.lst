@@ -7,6 +7,7 @@ my\id\roytamba\nextmes\module\generator\formatter\controller\WoFormatterControll
 my\id\roytamba\nextmes\module\settings\plc\model\PlcModel.class
 my\id\roytamba\nextmes\module\generator\controller\GeneratorController.class
 my\id\roytamba\nextmes\module\monitor\printer\controller\PrinterMonitorController.class
+my\id\roytamba\nextmes\module\settings\pc\controller\PcMasterController$DetailRow.class
 my\id\roytamba\nextmes\module\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\module\settings\pc\controller\PcMasterController.class
 my\id\roytamba\nextmes\module\settings\appearance\controller\AppearanceController.class

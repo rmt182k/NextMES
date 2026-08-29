@@ -6,8 +6,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -38,6 +40,19 @@
             <VBox spacing="5.0">
                 <Label text="IP Address:" />
                 <TextField fx:id="txtIp" promptText="Cth: 192.168.1.50" />
+            </VBox>
+            
+            <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                <Label text="Detail Tambahan:" />
+                <Button fx:id="btnDetails" maxWidth="Infinity" onAction="#openDetailsModal" style="-fx-background-color: #f8fafc; -fx-text-fill: #334155; -fx-border-color: #cbd5e1; -fx-border-radius: 4; -fx-cursor: hand;" text="⚙️ Konfigurasi Ekstra (0 item)">
+                    <padding>
+                        <Insets bottom="8.0" top="8.0" />
+                    </padding>
+                    <font>
+                        <Font name="Segoe UI" size="13.0" />
+                    </font>
+                </Button>
+                <Region VBox.vgrow="ALWAYS" />
             </VBox>
             
             <Button maxWidth="Infinity" onAction="#handleSave" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Simpan ke Master">
@@ -74,6 +89,14 @@
                     </padding>
                     <HBox.margin>
                         <Insets left="15.0" />
+                    </HBox.margin>
+                </Button>
+                <Button onAction="#handleImportCSV" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand;" text="📥 Import CSV">
+                    <padding>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                    </padding>
+                    <HBox.margin>
+                        <Insets left="10.0" />
                     </HBox.margin>
                 </Button>
             </HBox>

@@ -31,6 +31,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.Priority;
+import javafx.scene.control.Separator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -182,55 +187,101 @@ public class PcMonitorController {
         modalStage.initModality(Modality.APPLICATION_MODAL);
         modalStage.setTitle("Detail PC - " + pcName);
 
-        VBox layout = new VBox(15);
-        layout.setPadding(new Insets(20));
-        layout.setStyle("-fx-background-color: white;");
+        // Header
+        VBox headerBox = new VBox(5);
+        headerBox.setPadding(new Insets(20));
+        headerBox.setStyle("-fx-background-color: #1e293b;"); // Slate-800
+        
+        Label title = new Label(pcName);
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
+        title.setTextFill(Color.WHITE);
 
-        Label title = new Label("Informasi Detail: " + pcName);
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-
-        Label lblIp = new Label("IP Address: " + ip);
+        Label lblIp = new Label("IP: " + ip);
         lblIp.setFont(Font.font("Segoe UI", 14));
-        lblIp.setTextFill(Color.GRAY);
+        lblIp.setTextFill(Color.web("#94a3b8")); // Slate-400
+        
+        headerBox.getChildren().addAll(title, lblIp);
 
-        VBox detailsBox = new VBox(8);
+        // Content
+        GridPane grid = new GridPane();
+        grid.setHgap(20);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(25));
+        grid.setStyle("-fx-background-color: white;");
+
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setMinWidth(150);
+        col1.setPrefWidth(180);
+        col1.setMaxWidth(250);
+
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setHgrow(Priority.ALWAYS);
+
+        grid.getColumnConstraints().addAll(col1, col2);
 
         if (details.isEmpty()) {
-            Label noData = new Label("Tidak ada data kolom untuk PC ini.");
+            Label noData = new Label("Tidak ada data detail tambahan.");
             noData.setFont(Font.font("Segoe UI", 14));
-            detailsBox.getChildren().add(noData);
+            noData.setTextFill(Color.GRAY);
+            grid.add(noData, 0, 0);
         } else {
+            int row = 0;
             for (Map.Entry<String, String> entry : details.entrySet()) {
-                // Abaikan key dasar karena sudah muncul di judul card
                 String key = entry.getKey();
                 if (key.equals("name") || key.equals("ip") || key.equals("category")) {
                     continue;
                 }
 
-                Label lbl = new Label("• " + key + " : " + entry.getValue());
-                lbl.setFont(Font.font("Segoe UI", 13));
-                detailsBox.getChildren().add(lbl);
+                Label lblKey = new Label(key);
+                lblKey.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
+                lblKey.setTextFill(Color.web("#64748b")); // Slate-500
+
+                Label lblVal = new Label(entry.getValue());
+                lblVal.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
+                lblVal.setTextFill(Color.web("#0f172a")); // Slate-900
+                lblVal.setWrapText(true);
+
+                grid.add(lblKey, 0, row);
+                grid.add(lblVal, 1, row);
+                
+                row++;
+                
+                Separator sep = new Separator();
+                grid.add(sep, 0, row, 2, 1);
+                row++;
             }
         }
 
-        ScrollPane scroll = new ScrollPane(detailsBox);
+        ScrollPane scroll = new ScrollPane(grid);
         scroll.setFitToWidth(true);
         scroll.setStyle("-fx-background-color: transparent; -fx-background: white;");
-        scroll.setPrefHeight(350);
+        scroll.setPrefHeight(450);
 
-        Button btnRemote = new Button("Remote PC");
+        // Footer
+        HBox footerBox = new HBox();
+        footerBox.setPadding(new Insets(15, 25, 15, 25));
+        footerBox.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;");
+        footerBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Button btnRemote = new Button("💻 Remote PC");
         btnRemote.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-        btnRemote.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 8 15 8 15;");
+        btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
+        btnRemote.setPadding(new Insets(10, 20, 10, 20));
         btnRemote.setOnAction(e -> {
             System.out.println("Membuka Remote PC untuk IP: " + ip);
         });
+        
+        btnRemote.setOnMouseEntered(e -> btnRemote.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+        btnRemote.setOnMouseExited(e -> btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
 
-        HBox btnBox = new HBox(btnRemote);
-        btnBox.setAlignment(Pos.CENTER_RIGHT);
+        footerBox.getChildren().add(btnRemote);
 
-        layout.getChildren().addAll(title, lblIp, scroll, btnBox);
+        BorderPane mainLayout = new BorderPane();
+        mainLayout.setTop(headerBox);
+        mainLayout.setCenter(scroll);
+        mainLayout.setBottom(footerBox);
 
-        Scene scene = new Scene(layout, 550, 550);
+        Scene scene = new Scene(mainLayout, 600, 600);
         modalStage.setScene(scene);
         modalStage.show();
     }
