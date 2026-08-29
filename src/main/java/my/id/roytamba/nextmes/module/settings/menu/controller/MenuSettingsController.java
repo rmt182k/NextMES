@@ -19,7 +19,7 @@ public class MenuSettingsController {
     @FXML
     public void initialize() {
         // Setup item
-        cmbDefaultMenu.getItems().addAll("Pengaturan", "Monitor", "Dashboard (Segera Hadir)");
+        cmbDefaultMenu.getItems().addAll("Pengaturan", "Monitor", "Generator", "Dashboard (Segera Hadir)");
         cmbDefaultMenu.setValue("Pengaturan");
         
         loadMenuSettings();

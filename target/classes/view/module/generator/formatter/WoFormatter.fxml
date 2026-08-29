@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.generator.formatter.controller.WoFormatterController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <!-- CONTENT -->
+    <center>
+        <SplitPane dividerPositions="0.45, 0.55" orientation="HORIZONTAL" style="-fx-background-color: transparent;">
+            
+            <!-- INPUT AREA -->
+            <VBox spacing="10.0">
+                <Label text="Input Text (Setiap baris akan diproses):">
+                    <font>
+                        <Font name="Segoe UI Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextArea fx:id="txtInput" VBox.vgrow="ALWAYS">
+                    <font>
+                        <Font name="Consolas" size="14.0" />
+                    </font>
+                </TextArea>
+            </VBox>
+
+            <!-- CONTROL PANEL -->
+            <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #ffffff; -fx-background-radius: 8; -fx-border-color: #e2e8f0; -fx-border-radius: 8;">
+                <padding>
+                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                </padding>
+                <Label text="Kurung Pembungkus:">
+                    <font>
+                        <Font name="Segoe UI Bold" size="12.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="cmbBracket" prefWidth="150.0" />
+                
+                <Region VBox.vgrow="ALWAYS" />
+                
+                <Button maxWidth="Infinity" onAction="#handleGenerate" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Generate ➔">
+                    <font>
+                        <Font name="Segoe UI Bold" size="14.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Button>
+            </VBox>
+
+            <!-- OUTPUT AREA -->
+            <VBox spacing="10.0">
+                <Label text="Hasil Format:">
+                    <font>
+                        <Font name="Segoe UI Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextArea fx:id="txtOutput" editable="false" VBox.vgrow="ALWAYS">
+                    <font>
+                        <Font name="Consolas" size="14.0" />
+                    </font>
+                </TextArea>
+                
+                <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                    <Button onAction="#handleCopy" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand;" text="Copy to Clipboard">
+                        <font>
+                            <Font name="Segoe UI Bold" size="13.0" />
+                        </font>
+                        <padding>
+                            <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                        </padding>
+                    </Button>
+                </HBox>
+            </VBox>
+            
+        </SplitPane>
+    </center>
+    
+</BorderPane>

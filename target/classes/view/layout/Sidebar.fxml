@@ -76,6 +76,22 @@
             </font>
         </Button>
         
+        <Button fx:id="btnGenerator" alignment="BASELINE_LEFT" graphicTextGap="18.0" maxWidth="Infinity" onAction="#goToGenerator" prefHeight="45.0" style="-fx-cursor: hand;" text="Generator">
+            <padding>
+                <Insets left="20.0" />
+            </padding>
+            <graphic>
+                <Label text="🛠️" textFill="#cbd5e1">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </graphic>
+            <font>
+                <Font name="Segoe UI" size="14.0" />
+            </font>
+        </Button>
+        
         <Button fx:id="btnSettings" alignment="BASELINE_LEFT" graphicTextGap="15.0" maxWidth="Infinity" onAction="#goToSettings" prefHeight="45.0" style="-fx-cursor: hand;" text="Pengaturan">
             <padding>
                 <Insets left="20.0" />

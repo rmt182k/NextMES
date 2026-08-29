@@ -41,6 +41,13 @@
                         <fx:include source="pc/PcMaster.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB MASTER PRINTER -->
+                <Tab text="Master Printer">
+                    <content>
+                        <fx:include source="printer/PrinterMaster.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>

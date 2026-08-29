@@ -40,6 +40,8 @@ public class MainLayoutController {
             Router.navigate(AppRoute.DASHBOARD);
         } else if ("Monitor".equals(defaultMenu)) {
             Router.navigate(AppRoute.MONITOR);
+        } else if ("Generator".equals(defaultMenu)) {
+            Router.navigate(AppRoute.GENERATOR);
         } else {
             Router.navigate(AppRoute.SETTINGS);
         }
