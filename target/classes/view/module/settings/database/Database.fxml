@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.settings.database.controller.DatabaseController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+    <children>
+        <Label text="Konfigurasi Server Database">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        
+        <GridPane hgap="15.0" vgap="15.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.0" minWidth="10.0" prefWidth="250.0" />
+            </columnConstraints>
+            <children>
+                <Label text="Tipe Database:" GridPane.rowIndex="0" />
+                <ComboBox fx:id="cmbDbType" prefWidth="350.0" promptText="Pilih Database" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                <Label text="Host IP:" GridPane.rowIndex="1" />
+                <TextField fx:id="txtHost" promptText="localhost" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Port:" GridPane.rowIndex="2" />
+                <TextField fx:id="txtPort" promptText="3306" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="Nama Database:" GridPane.rowIndex="3" />
+                <TextField fx:id="txtDb" promptText="db_aplikasi" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Username:" GridPane.rowIndex="4" />
+                <TextField fx:id="txtUser" promptText="root" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                <Label text="Password:" GridPane.rowIndex="5" />
+                <PasswordField fx:id="txtPass" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            </children>
+        </GridPane>
+        
+        <HBox spacing="10.0">
+            <children>
+                <Button onAction="#handleTestConnection" style="-fx-background-color: #64748b; -fx-text-fill: white; -fx-cursor: hand;" text="Test Koneksi">
+                    <padding>
+                        <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                    </padding>
+                </Button>
+                <Button onAction="#handleSaveDatabase" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Simpan Koneksi">
+                    <padding>
+                        <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                    </padding>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+</VBox>

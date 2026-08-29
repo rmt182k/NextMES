@@ -55,6 +55,20 @@
                         <fx:include source="dctool/DcToolMaster.fxml" />
                     </content>
                 </Tab>
+
+                <!-- TAB KONEKSI DATABASE -->
+                <Tab text="Koneksi Database">
+                    <content>
+                        <fx:include source="database/Database.fxml" />
+                    </content>
+                </Tab>
+                
+                <!-- TAB INFORMASI SISTEM -->
+                <Tab text="Informasi Sistem">
+                    <content>
+                        <fx:include source="systeminfo/SystemInfo.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>
