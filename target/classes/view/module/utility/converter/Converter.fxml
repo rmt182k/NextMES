@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.utility.converter.controller.ConverterController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+    <children>
+        <Label text="Text Encoder &amp; Decoder">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        
+        <Label text="Area Atas (Input/Output)" />
+        <TextArea fx:id="txtInput" prefHeight="150.0" promptText="Masukkan teks biasa, Base64, atau deretan Hex di sini..." wrapText="true" />
+        
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <children>
+                <Label text="Algoritma:" />
+                <ComboBox fx:id="cmbAlgorithm" prefWidth="220.0" />
+                <Button onAction="#handleEncode" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand;" text="Encode ↓">
+                    <padding>
+                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                    </padding>
+                </Button>
+                <Button onAction="#handleDecode" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Decode ↓">
+                    <padding>
+                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                    </padding>
+                </Button>
+                <Button onAction="#handleClear" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand;" text="Clear">
+                    <padding>
+                        <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                    </padding>
+                </Button>
+            </children>
+        </HBox>
+        
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <children>
+                <Label text="Area Bawah (Input/Output)" />
+                <Label fx:id="lblDetectedFormat" text="Format Terdeteksi: -" textFill="#059669" visible="false">
+                    <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <TextArea fx:id="txtOutput" editable="true" prefHeight="250.0" promptText="Hasil encode/decode akan muncul di sini. Anda juga bisa copy/paste ke area ini." wrapText="true" style="-fx-control-inner-background: #f8fafc;" />
+    </children>
+</VBox>

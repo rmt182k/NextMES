@@ -108,5 +108,21 @@
                 <Font name="Segoe UI" size="14.0" />
             </font>
         </Button>
+
+        <Button fx:id="btnUtility" alignment="BASELINE_LEFT" graphicTextGap="15.0" maxWidth="Infinity" onAction="#goToUtility" prefHeight="45.0" style="-fx-cursor: hand;" text="Utility">
+            <padding>
+                <Insets left="20.0" />
+            </padding>
+            <graphic>
+                <Label text="🧰" textFill="#cbd5e1">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </graphic>
+            <font>
+                <Font name="Segoe UI" size="14.0" />
+            </font>
+        </Button>
     </children>
 </VBox>

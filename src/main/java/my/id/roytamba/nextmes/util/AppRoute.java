@@ -12,7 +12,8 @@ public enum AppRoute {
     DASHBOARD("/view/pages/Dashboard.fxml"),
     SETTINGS("/view/module/settings/Settings.fxml"),
     MONITOR("/view/module/monitor/Monitor.fxml"),
-    GENERATOR("/view/module/generator/Generator.fxml");
+    GENERATOR("/view/module/generator/Generator.fxml"),
+    UTILITY("/view/module/utility/Utility.fxml");
 
     private final String fxmlPath;
 
