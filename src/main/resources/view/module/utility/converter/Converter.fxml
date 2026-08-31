@@ -27,14 +27,9 @@
             <children>
                 <Label text="Algoritma:" />
                 <ComboBox fx:id="cmbAlgorithm" prefWidth="220.0" />
-                <Button onAction="#handleEncode" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand;" text="Encode ↓">
+                <Button onAction="#handleProcess" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Process Data ↓">
                     <padding>
-                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
-                    </padding>
-                </Button>
-                <Button onAction="#handleDecode" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;" text="Decode ↓">
-                    <padding>
-                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                        <Insets bottom="8.0" left="25.0" right="25.0" top="8.0" />
                     </padding>
                 </Button>
                 <Button onAction="#handleClear" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand;" text="Clear">

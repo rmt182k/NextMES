@@ -48,20 +48,52 @@ public class ConverterController {
     }
 
     @FXML
-    public void handleEncode(ActionEvent event) {
+    public void handleProcess(ActionEvent event) {
         String input = txtInput.getText();
-        if (input == null || input.isEmpty()) {
+        if (input == null || input.trim().isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Peringatan", "Input data tidak boleh kosong!");
             return;
         }
+        
+        String cleanInput = input.trim();
+        boolean shouldDecode = false;
+        
+        // 1. Cek apakah ini Hex (hanya karakter hex) atau Base64 yang valid, 
+        // dan tidak mengandung karakter plain text umum (seperti spasi di tengah, kurawal, dll)
+        if (cleanInput.startsWith("0x") || cleanInput.matches("^[0-9a-fA-F]{16,}$")) {
+            shouldDecode = true; // Jelas ini deretan Hex panjang
+        } else if (cleanInput.startsWith("H4sI") || cleanInput.startsWith("eJw") || cleanInput.startsWith("eJy") || cleanInput.startsWith("eJz")) {
+            shouldDecode = true; // Jelas ini Base64 GZIP / ZLIB
+        } else if (cleanInput.contains("{") || cleanInput.contains("<") || cleanInput.contains("\"") || cleanInput.contains(" ")) {
+            shouldDecode = false; // Ada karakter plain text JSON/XML/Spasi, pasti ini untuk di-encode
+        } else if (cleanInput.matches("^[A-Za-z0-9+/]+={0,2}$") && cleanInput.length() > 20) {
+            shouldDecode = true; // Looks like a long plain Base64 string
+        } else {
+            // Default fallback: coba decode, kalau gagal artinya plain text untuk di-encode
+            shouldDecode = true;
+        }
+
+        if (shouldDecode) {
+            boolean success = doDecode(cleanInput);
+            if (!success) {
+                // Jika gagal decode, berarti tebakan salah, mari kita coba encode saja
+                doEncode(input);
+            }
+        } else {
+            doEncode(input);
+        }
+    }
+
+    private void doEncode(String input) {
 
         String algorithm = cmbAlgorithm.getValue();
         if (algorithm.equals("Auto-Detect (Smart)")) {
             algorithm = "Base64 -> GZIP"; // Default fallback for Encoding
-            lblDetectedFormat.setText("Auto-Detect Mode: Menggunakan default (Base64 -> GZIP)");
+            lblDetectedFormat.setText("Operasi: ENCODE (Teks -> Base64 GZIP)");
             lblDetectedFormat.setVisible(true);
         } else {
-            lblDetectedFormat.setVisible(false);
+            lblDetectedFormat.setText("Operasi: ENCODE (" + algorithm + ")");
+            lblDetectedFormat.setVisible(true);
         }
 
         try {
@@ -94,21 +126,16 @@ public class ConverterController {
         }
     }
 
-    @FXML
-    public void handleDecode(ActionEvent event) {
-        String input = txtInput.getText().trim();
-        if (input.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Peringatan", "Input data tidak boleh kosong!");
-            return;
-        }
-
+    private boolean doDecode(String input) {
         String algorithm = cmbAlgorithm.getValue();
-        lblDetectedFormat.setVisible(false);
 
         try {
             if ("Auto-Detect (Smart)".equals(algorithm)) {
                 algorithm = detectFormat(input);
-                lblDetectedFormat.setText("Format Terdeteksi: " + algorithm);
+                lblDetectedFormat.setText("Operasi: DECODE (" + algorithm + ")");
+                lblDetectedFormat.setVisible(true);
+            } else {
+                lblDetectedFormat.setText("Operasi: DECODE (" + algorithm + ")");
                 lblDetectedFormat.setVisible(true);
             }
 
@@ -130,14 +157,11 @@ public class ConverterController {
             }
 
             txtOutput.setText(resultText);
+            return true;
 
-        } catch (IllegalArgumentException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Input bukan format " + algorithm + " yang valid!");
-            txtOutput.setText("");
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Error Decompress", "Gagal melakukan dekompresi data:\n" + e.getMessage());
-            txtOutput.setText("");
-            e.printStackTrace();
+            // Silently fail if called from smart detect, we will try encoding instead
+            return false;
         }
     }
 

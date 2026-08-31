@@ -3,10 +3,11 @@ package my.id.roytamba.nextmes.module.utility.fileencoder.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
-import java.util.Base64;
+import my.id.roytamba.nextmes.module.utility.fileencoder.util.EncodingHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -26,13 +27,24 @@ public class FileEncoderController {
     @FXML
     private ImageView imgPreview;
     @FXML
+    private Label lblDocPreview;
+    @FXML
+    private ComboBox<String> cmbFormat;
+    @FXML
     private TextArea txtOutput;
 
     private File selectedFile;
 
     @FXML
     public void initialize() {
-        // Initialization if needed
+        cmbFormat.getItems().addAll("Base64", "Hexadecimal (Base16)", "Base32", "Base58", "Ascii85 (Base85)");
+        cmbFormat.setValue("Base64");
+        
+        cmbFormat.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (selectedFile != null) {
+                processFileToString(selectedFile);
+            }
+        });
     }
 
     @FXML
@@ -59,22 +71,46 @@ public class FileEncoderController {
                         || lowerName.endsWith(".gif") || lowerName.endsWith(".bmp")) {
                     Image image = new Image(selectedFile.toURI().toString());
                     imgPreview.setImage(image);
+                    lblDocPreview.setVisible(false);
                 } else {
                     imgPreview.setImage(null);
+                    lblDocPreview.setVisible(true);
                 }
             } catch (Exception e) {
                 imgPreview.setImage(null);
+                lblDocPreview.setVisible(true);
             }
 
-            processFileToBase64(selectedFile);
+            processFileToString(selectedFile);
         }
     }
 
-    private void processFileToBase64(File file) {
+    private void processFileToString(File file) {
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
-            String base64String = Base64.getEncoder().encodeToString(fileContent);
-            txtOutput.setText(base64String);
+            String format = cmbFormat.getValue();
+            String encodedString = "";
+            
+            switch (format) {
+                case "Hexadecimal (Base16)":
+                    encodedString = EncodingHelper.encodeHex(fileContent);
+                    break;
+                case "Base32":
+                    encodedString = EncodingHelper.encodeBase32(fileContent);
+                    break;
+                case "Base58":
+                    encodedString = EncodingHelper.encodeBase58(fileContent);
+                    break;
+                case "Ascii85 (Base85)":
+                    encodedString = EncodingHelper.encodeAscii85(fileContent);
+                    break;
+                case "Base64":
+                default:
+                    encodedString = EncodingHelper.encodeBase64(fileContent);
+                    break;
+            }
+            
+            txtOutput.setText(encodedString);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Gagal membaca/mengkonversi file:\n" + e.getMessage());
         }
@@ -82,13 +118,13 @@ public class FileEncoderController {
 
     @FXML
     public void handleCopyToClipboard(ActionEvent event) {
-        String base64Text = txtOutput.getText();
-        if (base64Text != null && !base64Text.isEmpty()) {
+        String text = txtOutput.getText();
+        if (text != null && !text.isEmpty()) {
             final Clipboard clipboard = Clipboard.getSystemClipboard();
             final ClipboardContent content = new ClipboardContent();
-            content.putString(base64Text);
+            content.putString(text);
             clipboard.setContent(content);
-            showAlert(Alert.AlertType.INFORMATION, "Sukses", "Teks Base64 berhasil disalin ke clipboard!");
+            showAlert(Alert.AlertType.INFORMATION, "Sukses", "Teks berhasil disalin ke clipboard!");
         } else {
             showAlert(Alert.AlertType.WARNING, "Peringatan", "Tidak ada hasil konversi untuk disalin.");
         }
@@ -99,31 +135,57 @@ public class FileEncoderController {
         selectedFile = null;
         lblFileInfo.setText("Tidak ada file yang dipilih");
         imgPreview.setImage(null);
+        lblDocPreview.setVisible(false);
         txtOutput.clear();
     }
 
     @FXML
     public void handleDecodeToFile(ActionEvent event) {
-        String base64Text = txtOutput.getText().trim();
-        if (base64Text.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Peringatan", "Data Base64 kosong! Paste data Base64 terlebih dahulu.");
+        String textToDecode = txtOutput.getText().trim();
+        if (textToDecode.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Peringatan", "Data string kosong! Paste data teks terlebih dahulu.");
             return;
         }
 
+        // Coba deteksi magic number jika memungkinkan untuk menyarankan format
+        String suggestedExt = "bin";
+        String format = cmbFormat.getValue();
+        
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Simpan File Hasil Decode");
         fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Semua File (*.*)", "*.*"),
                 new FileChooser.ExtensionFilter("PNG Image", "*.png"),
                 new FileChooser.ExtensionFilter("JPEG Image", "*.jpg"),
                 new FileChooser.ExtensionFilter("PDF Document", "*.pdf"),
-                new FileChooser.ExtensionFilter("All Files", "*.*")
+                new FileChooser.ExtensionFilter("Word Document", "*.docx"),
+                new FileChooser.ExtensionFilter("Excel Document", "*.xlsx")
         );
 
         File fileToSave = fileChooser.showSaveDialog(txtOutput.getScene().getWindow());
 
         if (fileToSave != null) {
             try {
-                byte[] decodedBytes = Base64.getDecoder().decode(base64Text);
+                byte[] decodedBytes = null;
+                switch (format) {
+                    case "Hexadecimal (Base16)":
+                        decodedBytes = EncodingHelper.decodeHex(textToDecode);
+                        break;
+                    case "Base32":
+                        decodedBytes = EncodingHelper.decodeBase32(textToDecode);
+                        break;
+                    case "Base58":
+                        decodedBytes = EncodingHelper.decodeBase58(textToDecode);
+                        break;
+                    case "Ascii85 (Base85)":
+                        decodedBytes = EncodingHelper.decodeAscii85(textToDecode);
+                        break;
+                    case "Base64":
+                    default:
+                        decodedBytes = EncodingHelper.decodeBase64(textToDecode);
+                        break;
+                }
+                
                 try (FileOutputStream fos = new FileOutputStream(fileToSave)) {
                     fos.write(decodedBytes);
                 }
@@ -135,13 +197,16 @@ public class FileEncoderController {
                         || lowerName.endsWith(".gif") || lowerName.endsWith(".bmp")) {
                     Image image = new Image(fileToSave.toURI().toString());
                     imgPreview.setImage(image);
+                    lblDocPreview.setVisible(false);
+                    lblFileInfo.setText("Decode: " + fileToSave.getName());
+                } else {
+                    imgPreview.setImage(null);
+                    lblDocPreview.setVisible(true);
                     lblFileInfo.setText("Decode: " + fileToSave.getName());
                 }
                 
-            } catch (IllegalArgumentException e) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Teks bukan format Base64 yang valid!");
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Gagal menyimpan file:\n" + e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Error", "Gagal men-decode atau menyimpan file:\n" + e.getMessage());
             }
         }
     }

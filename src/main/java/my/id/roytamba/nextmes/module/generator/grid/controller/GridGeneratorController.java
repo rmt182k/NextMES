@@ -167,7 +167,7 @@ public class GridGeneratorController {
             sb.append("]");
         } else if ("CSV (Comma Separated Values)".equals(format)) {
             for (int c = 0; c < headerFields.size(); c++) {
-                sb.append("\"").append(escapeCsv(headerFields.get(c).getText().trim())).append("\"");
+                sb.append(escapeCsv(headerFields.get(c).getText().trim()));
                 if (c < headerFields.size() - 1) sb.append(",");
             }
             sb.append("\n");
@@ -178,7 +178,7 @@ public class GridGeneratorController {
                     if (r < lines.length) {
                         value = escapeCsv(lines[r].trim());
                     }
-                    sb.append("\"").append(value).append("\"");
+                    sb.append(value);
                     if (c < headerFields.size() - 1) sb.append(",");
                 }
                 sb.append("\n");
