@@ -43,6 +43,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import my.id.roytamba.nextmes.module.monitor.util.PingChartModal;
+import my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService;
 
 public class PcMonitorController {
 
@@ -120,6 +122,7 @@ public class PcMonitorController {
                         details.put(propKey, props.getProperty(propName));
                     }
                 }
+                PingHeartbeatService.getInstance().registerIp(ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PcData(name, ip, details));
             }
         }
@@ -270,6 +273,17 @@ public class PcMonitorController {
         footerBox.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;");
         footerBox.setAlignment(Pos.CENTER_RIGHT);
 
+        Button btnPing = new Button("📡 Ping Monitor");
+        btnPing.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+        btnPing.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
+        btnPing.setPadding(new Insets(10, 20, 10, 20));
+        btnPing.setOnAction(e -> {
+            PingChartModal.show(pcName, ip);
+        });
+        
+        btnPing.setOnMouseEntered(e -> btnPing.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+        btnPing.setOnMouseExited(e -> btnPing.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+
         Button btnRemote = new Button("💻 Remote PC");
         btnRemote.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
@@ -281,7 +295,9 @@ public class PcMonitorController {
         btnRemote.setOnMouseEntered(e -> btnRemote.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
         btnRemote.setOnMouseExited(e -> btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
 
-        footerBox.getChildren().add(btnRemote);
+        // Tambahkan gap antar tombol
+        footerBox.setSpacing(10);
+        footerBox.getChildren().addAll(btnPing, btnRemote);
 
         BorderPane mainLayout = new BorderPane();
         mainLayout.setTop(headerBox);

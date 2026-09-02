@@ -28,7 +28,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import my.id.roytamba.nextmes.module.monitor.util.PingChartModal;
+import my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService;
 
 public class PrinterMonitorController {
 
@@ -87,6 +95,7 @@ public class PrinterMonitorController {
             String ip = props.getProperty("printer." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
+                PingHeartbeatService.getInstance().registerIp(ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PrinterData(name, ip));
             }
         }
@@ -126,9 +135,11 @@ public class PrinterMonitorController {
         card.setAlignment(Pos.CENTER);
         card.setSpacing(5);
         card.setPadding(new Insets(15, 10, 15, 10));
-        card.setStyle("-fx-background-color: white; -fx-border-color: #dcdcdc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        card.setStyle("-fx-background-color: white; -fx-border-color: #dcdcdc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;");
         card.setPrefSize(240, 130);
         card.setMaxSize(240, 130);
+
+        card.setOnMouseClicked(e -> showDetailModal(name, ip));
 
         Label icon = new Label("🖨️"); // Icon Printer
         icon.setFont(Font.font("Segoe UI Emoji", 36));
@@ -151,6 +162,58 @@ public class PrinterMonitorController {
         card.getProperties().put("statusLabel", lblStatus);
 
         return card;
+    }
+
+    private void showDetailModal(String printerName, String ip) {
+        Stage modalStage = new Stage();
+        modalStage.initModality(Modality.APPLICATION_MODAL);
+        modalStage.setTitle("Detail Printer - " + printerName);
+
+        VBox headerBox = new VBox(5);
+        headerBox.setPadding(new Insets(20));
+        headerBox.setStyle("-fx-background-color: #1e293b;");
+        
+        Label title = new Label(printerName);
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
+        title.setTextFill(Color.WHITE);
+
+        Label lblIp = new Label("IP: " + ip);
+        lblIp.setFont(Font.font("Segoe UI", 14));
+        lblIp.setTextFill(Color.web("#94a3b8"));
+        
+        headerBox.getChildren().addAll(title, lblIp);
+
+        HBox footerBox = new HBox();
+        footerBox.setPadding(new Insets(15, 25, 15, 25));
+        footerBox.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;");
+        footerBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Button btnPing = new Button("📡 Ping Monitor");
+        btnPing.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+        btnPing.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
+        btnPing.setPadding(new Insets(10, 20, 10, 20));
+        btnPing.setOnAction(e -> {
+            PingChartModal.show(printerName, ip);
+        });
+        
+        btnPing.setOnMouseEntered(e -> btnPing.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+        btnPing.setOnMouseExited(e -> btnPing.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+
+        footerBox.getChildren().add(btnPing);
+
+        BorderPane mainLayout = new BorderPane();
+        mainLayout.setTop(headerBox);
+        
+        VBox emptyCenter = new VBox();
+        emptyCenter.setStyle("-fx-background-color: white;");
+        emptyCenter.setPrefHeight(200);
+        mainLayout.setCenter(emptyCenter);
+        
+        mainLayout.setBottom(footerBox);
+
+        Scene scene = new Scene(mainLayout, 500, 350);
+        modalStage.setScene(scene);
+        modalStage.show();
     }
 
     private boolean isSmartMatch(String text, String[] keywords) {

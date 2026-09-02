@@ -1,5 +1,6 @@
 my\id\roytamba\nextmes\module\alarm\service\DevicePingService$Device.class
 my\id\roytamba\nextmes\module\monitor\dctool\controller\DcToolMonitorController.class
+my\id\roytamba\nextmes\module\monitor\service\PingHeartbeatService$PingSession.class
 my\id\roytamba\nextmes\module\monitor\plc\controller\PlcMonitorController$PlcData.class
 my\id\roytamba\nextmes\module\alarm\service\TaskReminderService.class
 my\id\roytamba\nextmes\module\settings\systeminfo\controller\SystemInfoController.class
@@ -34,9 +35,11 @@ my\id\roytamba\nextmes\module\utility\controller\UtilityController.class
 my\id\roytamba\nextmes\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\module\monitor\pc\controller\PcMonitorController.class
 my\id\roytamba\nextmes\module\settings\pc\model\PcModel.class
+my\id\roytamba\nextmes\module\monitor\util\PingChartModal.class
 my\id\roytamba\nextmes\module\utility\fileencoder\controller\FileEncoderController.class
 my\id\roytamba\nextmes\module\generator\controller\GeneratorController.class
 my\id\roytamba\nextmes\module\generator\grid\controller\GridGeneratorController.class
+my\id\roytamba\nextmes\module\monitor\service\PingHeartbeatService.class
 my\id\roytamba\nextmes\module\monitor\plc\controller\PlcMonitorController.class
 my\id\roytamba\nextmes\module\settings\plc\controller\PlcMasterController.class
 my\id\roytamba\nextmes\module\settings\printer\model\PrinterModel.class
