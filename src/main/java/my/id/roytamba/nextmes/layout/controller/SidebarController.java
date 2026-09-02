@@ -25,6 +25,7 @@ public class SidebarController {
     @FXML private Button btnGenerator;
     @FXML private Button btnSettings;
     @FXML private Button btnUtility;
+    @FXML private Button btnAlarm;
 
     private final String ACTIVE_STYLE = "-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-cursor: hand;";
     private final String INACTIVE_STYLE = "-fx-background-color: transparent; -fx-text-fill: #cbd5e1; -fx-cursor: hand;";
@@ -80,11 +81,18 @@ public class SidebarController {
         setActiveButton(btnUtility);
     }
 
+    @FXML
+    public void goToAlarm(ActionEvent event) {
+        Router.navigate(AppRoute.ALARM);
+        setActiveButton(btnAlarm);
+    }
+
     private void setActiveButton(Button activeButton) {
         btnMonitor.setStyle(INACTIVE_STYLE);
         btnGenerator.setStyle(INACTIVE_STYLE);
         btnSettings.setStyle(INACTIVE_STYLE);
         btnUtility.setStyle(INACTIVE_STYLE);
+        btnAlarm.setStyle(INACTIVE_STYLE);
         if(activeButton != null) {
             activeButton.setStyle(ACTIVE_STYLE);
         }
@@ -101,6 +109,7 @@ public class SidebarController {
             btnGenerator.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             btnSettings.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             btnUtility.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            btnAlarm.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
             animateSidebar(COLLAPSED_WIDTH);
             isExpanded = false;
@@ -114,6 +123,7 @@ public class SidebarController {
             btnGenerator.setContentDisplay(ContentDisplay.LEFT);
             btnSettings.setContentDisplay(ContentDisplay.LEFT);
             btnUtility.setContentDisplay(ContentDisplay.LEFT);
+            btnAlarm.setContentDisplay(ContentDisplay.LEFT);
 
             animateSidebar(EXPANDED_WIDTH);
             isExpanded = true;
