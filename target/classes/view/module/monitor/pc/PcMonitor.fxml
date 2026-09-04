@@ -31,13 +31,7 @@
                 
                 <HBox alignment="CENTER_RIGHT" spacing="15.0">
                     <children>
-                        <Label text="Ping Interval (Detik):">
-                            <font>
-                                <Font name="Segoe UI" size="14.0" />
-                            </font>
-                        </Label>
-                        <Spinner fx:id="spinnerInterval" prefWidth="80.0" />
-                        
+
                         <Label text="Kategori:">
                             <font>
                                 <Font name="Segoe UI" size="14.0" />
