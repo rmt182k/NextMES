@@ -43,6 +43,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import my.id.roytamba.nextmes.module.monitor.util.PingChartModal;
+import my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService;
 
 public class PcMonitorController {
 
@@ -120,6 +122,7 @@ public class PcMonitorController {
                         details.put(propKey, props.getProperty(propName));
                     }
                 }
+                PingHeartbeatService.getInstance().registerIp(ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PcData(name, ip, details));
             }
         }
@@ -270,18 +273,60 @@ public class PcMonitorController {
         footerBox.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;");
         footerBox.setAlignment(Pos.CENTER_RIGHT);
 
+        Button btnPing = new Button("📡 Ping Monitor");
+        btnPing.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+        btnPing.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
+        btnPing.setPadding(new Insets(10, 20, 10, 20));
+        btnPing.setOnAction(e -> {
+            PingChartModal.show(pcName, ip);
+        });
+        
+        btnPing.setOnMouseEntered(e -> btnPing.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+        btnPing.setOnMouseExited(e -> btnPing.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
+
         Button btnRemote = new Button("💻 Remote PC");
         btnRemote.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
         btnRemote.setPadding(new Insets(10, 20, 10, 20));
         btnRemote.setOnAction(e -> {
-            System.out.println("Membuka Remote PC untuk IP: " + ip);
+            try {
+                java.io.File propFile = new java.io.File("src/main/resources/remote.properties");
+                String vncPath = "C:\\Program Files\\uvnc bvba\\UltraVNC\\vncviewer.exe";
+                String vncUser = "admin.roymt";
+                String vncPass = "VietNamChienThang#$202620";
+
+                if (propFile.exists()) {
+                    java.util.Properties props = new java.util.Properties();
+                    try (java.io.FileInputStream fis = new java.io.FileInputStream(propFile)) {
+                        props.load(fis);
+                        vncPath = props.getProperty("vnc.path", vncPath);
+                        vncUser = props.getProperty("vnc.user", vncUser);
+                        vncPass = props.getProperty("vnc.password", vncPass);
+                    }
+                }
+                
+                ProcessBuilder pb = new ProcessBuilder(vncPath, "-connect", ip + "::5900", "-user", vncUser, "-password", vncPass, "-autoscaling");
+                pb.start();
+                
+                System.out.println("Membuka Remote PC untuk IP: " + ip);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Platform.runLater(() -> {
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+                    alert.setTitle("Remote Error");
+                    alert.setHeaderText("Gagal membuka VNC Viewer");
+                    alert.setContentText(ex.getMessage());
+                    alert.show();
+                });
+            }
         });
         
         btnRemote.setOnMouseEntered(e -> btnRemote.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
         btnRemote.setOnMouseExited(e -> btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));
 
-        footerBox.getChildren().add(btnRemote);
+        // Tambahkan gap antar tombol
+        footerBox.setSpacing(10);
+        footerBox.getChildren().addAll(btnPing, btnRemote);
 
         BorderPane mainLayout = new BorderPane();
         mainLayout.setTop(headerBox);

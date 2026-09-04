@@ -71,14 +71,45 @@ public class DevicePingService {
     }
 
     private void loadDevices() {
+        List<Device> oldDevices = new ArrayList<>(monitoredDevices);
         monitoredDevices.clear();
-        loadFromProperties("plc", "src/main/resources/plc.properties", "PLC");
-        loadFromProperties("pc", "src/main/resources/pc.properties", "PC");
-        loadFromProperties("printer", "src/main/resources/printer.properties", "Printer");
-        loadFromProperties("dctool", "src/main/resources/dctool.properties", "DC Tool");
+        loadFromProperties("plc", "src/main/resources/plc.properties", "PLC", oldDevices);
+        loadFromProperties("pc", "src/main/resources/pc.properties", "PC", oldDevices);
+        loadFromProperties("printer", "src/main/resources/printer.properties", "Printer", oldDevices);
+        loadFromProperties("dctool", "src/main/resources/dctool.properties", "DC Tool", oldDevices);
+        loadSettings();
     }
 
-    private void loadFromProperties(String prefix, String path, String typeName) {
+    public void saveSettings() {
+        Properties props = new Properties();
+        for (Device dev : monitoredDevices) {
+            props.setProperty(dev.id, String.valueOf(dev.isMonitored));
+        }
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream("src/main/resources/monitor_settings.properties")) {
+            props.store(fos, "Monitoring Settings");
+        } catch (Exception e) {
+            System.err.println("Failed to save monitor settings: " + e.getMessage());
+        }
+    }
+
+    private void loadSettings() {
+        File file = new File("src/main/resources/monitor_settings.properties");
+        if (!file.exists()) return;
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(file)) {
+            props.load(fis);
+            for (Device dev : monitoredDevices) {
+                String val = props.getProperty(dev.id);
+                if (val != null) {
+                    dev.isMonitored = Boolean.parseBoolean(val);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to load monitor settings: " + e.getMessage());
+        }
+    }
+
+    private void loadFromProperties(String prefix, String path, String typeName, List<Device> oldDevices) {
         File propFile = new File(path);
         if (!propFile.exists()) return;
         
@@ -93,7 +124,14 @@ public class DevicePingService {
                     String ip = props.getProperty(prefix + "." + id + ".ip", "");
                     
                     if (!ip.isEmpty()) {
-                        monitoredDevices.add(new Device(id, typeName, name, ip));
+                        Device newDev = new Device(id, typeName, name, ip);
+                        for (Device old : oldDevices) {
+                            if (old.id.equals(id) && old.type.equals(typeName)) {
+                                newDev.isMonitored = old.isMonitored;
+                                break;
+                            }
+                        }
+                        monitoredDevices.add(newDev);
                     }
                 }
             }

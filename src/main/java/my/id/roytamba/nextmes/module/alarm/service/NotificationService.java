@@ -61,6 +61,15 @@ public class NotificationService {
             
             // If the alert is not already showing, show it
             alert.show();
+            
+            // Auto-close after 3 seconds
+            javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(3));
+            delay.setOnFinished(e -> {
+                if (alert.isShowing()) {
+                    alert.close();
+                }
+            });
+            delay.play();
         });
     }
 }

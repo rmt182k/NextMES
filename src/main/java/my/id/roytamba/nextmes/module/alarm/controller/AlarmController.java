@@ -96,6 +96,18 @@ public class AlarmController {
         });
 
         colMonitor.setCellValueFactory(cell -> new SimpleBooleanProperty(cell.getValue().isMonitored));
+        
+        CheckBox chkAll = new CheckBox();
+        chkAll.setOnAction(e -> {
+            boolean selected = chkAll.isSelected();
+            for (DevicePingService.Device dev : deviceList) {
+                dev.isMonitored = selected;
+            }
+            pingService.saveSettings();
+            tableDevice.refresh();
+        });
+        colMonitor.setGraphic(chkAll);
+        
         colMonitor.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Boolean isMonitored, boolean empty) {
@@ -108,6 +120,7 @@ public class AlarmController {
                     chk.setOnAction(e -> {
                         DevicePingService.Device dev = getTableView().getItems().get(getIndex());
                         dev.isMonitored = chk.isSelected();
+                        pingService.saveSettings();
                     });
                     HBox box = new HBox(chk);
                     box.setAlignment(Pos.CENTER);
@@ -246,6 +259,8 @@ public class AlarmController {
         pingService.reloadDevices();
         refreshDeviceTable();
     }
+
+
 
     @FXML
     public void handleAddReminder(ActionEvent event) {
