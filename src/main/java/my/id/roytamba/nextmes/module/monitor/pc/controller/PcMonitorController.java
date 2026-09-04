@@ -289,7 +289,36 @@ public class PcMonitorController {
         btnRemote.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;");
         btnRemote.setPadding(new Insets(10, 20, 10, 20));
         btnRemote.setOnAction(e -> {
-            System.out.println("Membuka Remote PC untuk IP: " + ip);
+            try {
+                java.io.File propFile = new java.io.File("src/main/resources/remote.properties");
+                String vncPath = "C:\\Program Files\\uvnc bvba\\UltraVNC\\vncviewer.exe";
+                String vncUser = "admin.roymt";
+                String vncPass = "VietNamChienThang#$202620";
+
+                if (propFile.exists()) {
+                    java.util.Properties props = new java.util.Properties();
+                    try (java.io.FileInputStream fis = new java.io.FileInputStream(propFile)) {
+                        props.load(fis);
+                        vncPath = props.getProperty("vnc.path", vncPath);
+                        vncUser = props.getProperty("vnc.user", vncUser);
+                        vncPass = props.getProperty("vnc.password", vncPass);
+                    }
+                }
+                
+                ProcessBuilder pb = new ProcessBuilder(vncPath, "-connect", ip + "::5900", "-user", vncUser, "-password", vncPass, "-autoscaling");
+                pb.start();
+                
+                System.out.println("Membuka Remote PC untuk IP: " + ip);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Platform.runLater(() -> {
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+                    alert.setTitle("Remote Error");
+                    alert.setHeaderText("Gagal membuka VNC Viewer");
+                    alert.setContentText(ex.getMessage());
+                    alert.show();
+                });
+            }
         });
         
         btnRemote.setOnMouseEntered(e -> btnRemote.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6;"));

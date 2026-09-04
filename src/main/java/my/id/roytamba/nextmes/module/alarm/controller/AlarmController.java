@@ -103,6 +103,7 @@ public class AlarmController {
             for (DevicePingService.Device dev : deviceList) {
                 dev.isMonitored = selected;
             }
+            pingService.saveSettings();
             tableDevice.refresh();
         });
         colMonitor.setGraphic(chkAll);
@@ -119,6 +120,7 @@ public class AlarmController {
                     chk.setOnAction(e -> {
                         DevicePingService.Device dev = getTableView().getItems().get(getIndex());
                         dev.isMonitored = chk.isSelected();
+                        pingService.saveSettings();
                     });
                     HBox box = new HBox(chk);
                     box.setAlignment(Pos.CENTER);

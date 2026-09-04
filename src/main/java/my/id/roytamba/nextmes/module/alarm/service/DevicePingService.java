@@ -77,6 +77,36 @@ public class DevicePingService {
         loadFromProperties("pc", "src/main/resources/pc.properties", "PC", oldDevices);
         loadFromProperties("printer", "src/main/resources/printer.properties", "Printer", oldDevices);
         loadFromProperties("dctool", "src/main/resources/dctool.properties", "DC Tool", oldDevices);
+        loadSettings();
+    }
+
+    public void saveSettings() {
+        Properties props = new Properties();
+        for (Device dev : monitoredDevices) {
+            props.setProperty(dev.id, String.valueOf(dev.isMonitored));
+        }
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream("src/main/resources/monitor_settings.properties")) {
+            props.store(fos, "Monitoring Settings");
+        } catch (Exception e) {
+            System.err.println("Failed to save monitor settings: " + e.getMessage());
+        }
+    }
+
+    private void loadSettings() {
+        File file = new File("src/main/resources/monitor_settings.properties");
+        if (!file.exists()) return;
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(file)) {
+            props.load(fis);
+            for (Device dev : monitoredDevices) {
+                String val = props.getProperty(dev.id);
+                if (val != null) {
+                    dev.isMonitored = Boolean.parseBoolean(val);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to load monitor settings: " + e.getMessage());
+        }
     }
 
     private void loadFromProperties(String prefix, String path, String typeName, List<Device> oldDevices) {
