@@ -112,7 +112,7 @@ public class PlcMonitorController {
             String ip = props.getProperty("plc." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
-                PingHeartbeatService.getInstance().registerIp(ip);
+                PingHeartbeatService.getInstance().registerIp("plc", ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PlcData(name, ip));
             }
         }

@@ -98,7 +98,7 @@ public class DcToolMonitorController {
             String ip = props.getProperty("dctool." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
-                PingHeartbeatService.getInstance().registerIp(ip);
+                PingHeartbeatService.getInstance().registerIp("dctool", ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new DcToolData(name, ip));
             }
         }

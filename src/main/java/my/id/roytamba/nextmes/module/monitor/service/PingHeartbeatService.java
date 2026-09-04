@@ -27,12 +27,32 @@ public class PingHeartbeatService {
     });
 
     private final Map<String, Boolean> registeredIps = new ConcurrentHashMap<>();
+    private final Map<String, String> deviceTypes = new ConcurrentHashMap<>();
     private final String LOG_DIR = "logs/ping_monitor";
+
+    public static boolean isLoggingEnabled = true;
 
     private PingHeartbeatService() {
         File dir = new File(LOG_DIR);
         if (!dir.exists()) {
             dir.mkdirs();
+        }
+        
+        // Load initial settings
+        try {
+            File propFile = new File("src/main/resources/config.properties");
+            if (propFile.exists()) {
+                java.util.Properties props = new java.util.Properties();
+                try (java.io.FileInputStream fis = new java.io.FileInputStream(propFile)) {
+                    props.load(fis);
+                    String logVal = props.getProperty("log.enabled");
+                    if (logVal != null) {
+                        isLoggingEnabled = Boolean.parseBoolean(logVal);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Gagal memuat pengaturan log: " + e.getMessage());
         }
     }
 
@@ -43,9 +63,10 @@ public class PingHeartbeatService {
         return instance;
     }
 
-    public void registerIp(String ip) {
+    public void registerIp(String deviceType, String ip) {
         if (!registeredIps.containsKey(ip)) {
             registeredIps.put(ip, true);
+            deviceTypes.put(ip, deviceType);
             // Ping dilakukan setiap 5 detik di background, 
             // khusus untuk menulis riwayat ke file log
             scheduler.scheduleAtFixedRate(() -> executePingAndLog(ip), 0, 5, TimeUnit.SECONDS);
@@ -97,8 +118,12 @@ public class PingHeartbeatService {
     }
 
     private void writeToLogFile(String ip, String text) {
+        if (!isLoggingEnabled) return;
+        
         try {
-            File logFile = new File(LOG_DIR, "ping_" + ip.replace(".", "_") + ".log");
+            String deviceType = deviceTypes.getOrDefault(ip, "unknown");
+            String dateStr = java.time.LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            File logFile = new File(LOG_DIR, deviceType + "_ping_" + ip.replace(".", "_") + "_" + dateStr + ".log");
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
                 writer.write(text);
                 writer.newLine();

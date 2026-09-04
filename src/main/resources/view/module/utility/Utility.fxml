@@ -27,6 +27,13 @@
                         <fx:include source="fileencoder/FileEncoder.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB TEXT COMPARE -->
+                <Tab text="Text Compare">
+                    <content>
+                        <fx:include source="textcompare/TextCompare.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>

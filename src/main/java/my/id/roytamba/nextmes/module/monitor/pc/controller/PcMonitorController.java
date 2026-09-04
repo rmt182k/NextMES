@@ -122,7 +122,7 @@ public class PcMonitorController {
                         details.put(propKey, props.getProperty(propName));
                     }
                 }
-                PingHeartbeatService.getInstance().registerIp(ip);
+                PingHeartbeatService.getInstance().registerIp("pc", ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PcData(name, ip, details));
             }
         }

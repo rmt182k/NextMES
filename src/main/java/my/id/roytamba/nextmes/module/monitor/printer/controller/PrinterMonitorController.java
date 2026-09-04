@@ -95,7 +95,7 @@ public class PrinterMonitorController {
             String ip = props.getProperty("printer." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
-                PingHeartbeatService.getInstance().registerIp(ip);
+                PingHeartbeatService.getInstance().registerIp("printer", ip);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PrinterData(name, ip));
             }
         }

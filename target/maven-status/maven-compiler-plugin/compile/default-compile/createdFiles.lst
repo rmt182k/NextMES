@@ -16,12 +16,15 @@ my\id\roytamba\nextmes\module\alarm\model\ReminderModel.class
 my\id\roytamba\nextmes\module\settings\pc\controller\PcMasterController$DetailRow.class
 my\id\roytamba\nextmes\module\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\module\settings\pc\controller\PcMasterController.class
+my\id\roytamba\nextmes\module\settings\log\controller\LogSettingsController.class
+my\id\roytamba\nextmes\module\utility\textcompare\controller\TextCompareController.class
 my\id\roytamba\nextmes\module\alarm\controller\AlarmController$4.class
 my\id\roytamba\nextmes\module\settings\appearance\controller\AppearanceController.class
 my\id\roytamba\nextmes\module\alarm\controller\AlarmController.class
 my\id\roytamba\nextmes\util\Router.class
 my\id\roytamba\nextmes\module\settings\database\controller\DatabaseController.class
 my\id\roytamba\nextmes\module\generator\excel\controller\ExcelGeneratorController.class
+my\id\roytamba\nextmes\module\settings\log\controller\LogSettingsController$1.class
 my\id\roytamba\nextmes\layout\controller\MainLayoutController.class
 my\id\roytamba\nextmes\module\alarm\service\NotificationService.class
 my\id\roytamba\nextmes\module\alarm\controller\AlarmController$1.class
@@ -31,6 +34,7 @@ my\id\roytamba\nextmes\module\monitor\pc\controller\PcMonitorController$PcData.c
 my\id\roytamba\nextmes\module\alarm\controller\AlarmController$3.class
 my\id\roytamba\nextmes\module\settings\dctool\model\DcToolModel.class
 my\id\roytamba\nextmes\module\utility\controller\UtilityController.class
+my\id\roytamba\nextmes\module\settings\log\controller\LogSettingsController$LogFileItem.class
 my\id\roytamba\nextmes\settings\controller\SettingsController.class
 my\id\roytamba\nextmes\module\monitor\pc\controller\PcMonitorController.class
 my\id\roytamba\nextmes\module\settings\pc\model\PcModel.class

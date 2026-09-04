@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+
+<VBox spacing="15.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.id.roytamba.nextmes.module.settings.log.controller.LogSettingsController">
+    <Label text="Pengaturan Log Monitoring" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    
+    <HBox spacing="15.0" VBox.vgrow="NEVER">
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
+            <Label text="Global Log Toggle" style="-fx-font-weight: bold;" />
+            <Label text="Aktifkan/nonaktifkan penulisan file log monitoring." textFill="#666666" wrapText="true" />
+            <CheckBox fx:id="chkEnableLog" text="Aktifkan Pencatatan Log" onAction="#handleToggleLog" />
+        </VBox>
+
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
+            <Label text="Manajemen Penyimpanan Log" style="-fx-font-weight: bold;" />
+            <Label fx:id="lblLogSize" text="Total Ukuran Log: Mengkalkulasi..." textFill="#666666" wrapText="true" />
+            <HBox spacing="10.0">
+                <Button text="Buka Folder" onAction="#handleOpenFolder" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-cursor: hand;" />
+                <Button text="Hapus Semua Log" onAction="#handleClearLogs" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand;" />
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="10.0" VBox.vgrow="ALWAYS" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <Label text="Daftar Log File" style="-fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label text="Filter Device:" />
+            <ComboBox fx:id="cmbDeviceType" prefWidth="120.0" />
+            <Label text="Filter Tanggal:" />
+            <DatePicker fx:id="dpDate" prefWidth="150.0" />
+            <Button text="Reset Filter" onAction="#handleResetFilter" />
+        </HBox>
+        
+        <TableView fx:id="tableLogs" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colFileName" text="Nama File" prefWidth="250.0" />
+                <TableColumn fx:id="colDevice" text="Device" prefWidth="100.0" />
+                <TableColumn fx:id="colIp" text="IP Address" prefWidth="120.0" />
+                <TableColumn fx:id="colDate" text="Tanggal" prefWidth="100.0" />
+                <TableColumn fx:id="colSize" text="Ukuran" prefWidth="100.0" />
+                <TableColumn fx:id="colAction" text="Aksi" prefWidth="150.0" />
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

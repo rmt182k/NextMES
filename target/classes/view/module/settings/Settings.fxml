@@ -69,6 +69,13 @@
                         <fx:include source="systeminfo/SystemInfo.fxml" />
                     </content>
                 </Tab>
+                
+                <!-- TAB MANAJEMEN LOG -->
+                <Tab text="Manajemen Log">
+                    <content>
+                        <fx:include source="log/LogSettings.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>
