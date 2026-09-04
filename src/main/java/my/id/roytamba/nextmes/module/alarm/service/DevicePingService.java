@@ -71,14 +71,15 @@ public class DevicePingService {
     }
 
     private void loadDevices() {
+        List<Device> oldDevices = new ArrayList<>(monitoredDevices);
         monitoredDevices.clear();
-        loadFromProperties("plc", "src/main/resources/plc.properties", "PLC");
-        loadFromProperties("pc", "src/main/resources/pc.properties", "PC");
-        loadFromProperties("printer", "src/main/resources/printer.properties", "Printer");
-        loadFromProperties("dctool", "src/main/resources/dctool.properties", "DC Tool");
+        loadFromProperties("plc", "src/main/resources/plc.properties", "PLC", oldDevices);
+        loadFromProperties("pc", "src/main/resources/pc.properties", "PC", oldDevices);
+        loadFromProperties("printer", "src/main/resources/printer.properties", "Printer", oldDevices);
+        loadFromProperties("dctool", "src/main/resources/dctool.properties", "DC Tool", oldDevices);
     }
 
-    private void loadFromProperties(String prefix, String path, String typeName) {
+    private void loadFromProperties(String prefix, String path, String typeName, List<Device> oldDevices) {
         File propFile = new File(path);
         if (!propFile.exists()) return;
         
@@ -93,7 +94,14 @@ public class DevicePingService {
                     String ip = props.getProperty(prefix + "." + id + ".ip", "");
                     
                     if (!ip.isEmpty()) {
-                        monitoredDevices.add(new Device(id, typeName, name, ip));
+                        Device newDev = new Device(id, typeName, name, ip);
+                        for (Device old : oldDevices) {
+                            if (old.id.equals(id) && old.type.equals(typeName)) {
+                                newDev.isMonitored = old.isMonitored;
+                                break;
+                            }
+                        }
+                        monitoredDevices.add(newDev);
                     }
                 }
             }
