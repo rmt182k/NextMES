@@ -28,6 +28,7 @@ public class PingHeartbeatService {
 
     private final Map<String, Boolean> registeredIps = new ConcurrentHashMap<>();
     private final Map<String, String> deviceTypes = new ConcurrentHashMap<>();
+    private final Map<String, java.util.concurrent.ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
     private final String LOG_DIR = "logs/ping_monitor";
 
     public static boolean isLoggingEnabled = true;
@@ -63,13 +64,26 @@ public class PingHeartbeatService {
         return instance;
     }
 
-    public void registerIp(String deviceType, String ip) {
+    public void registerIp(String deviceType, String ip, int intervalSeconds) {
         if (!registeredIps.containsKey(ip)) {
             registeredIps.put(ip, true);
             deviceTypes.put(ip, deviceType);
-            // Ping dilakukan setiap 5 detik di background, 
-            // khusus untuk menulis riwayat ke file log
-            scheduler.scheduleAtFixedRate(() -> executePingAndLog(ip), 0, 5, TimeUnit.SECONDS);
+            java.util.concurrent.ScheduledFuture<?> task = scheduler.scheduleAtFixedRate(() -> executePingAndLog(ip), 0, intervalSeconds, TimeUnit.SECONDS);
+            scheduledTasks.put(ip, task);
+        }
+    }
+
+    public void updateInterval(String targetDeviceType, int newIntervalSeconds) {
+        for (Map.Entry<String, String> entry : deviceTypes.entrySet()) {
+            if (entry.getValue().equals(targetDeviceType)) {
+                String ip = entry.getKey();
+                java.util.concurrent.ScheduledFuture<?> existingTask = scheduledTasks.get(ip);
+                if (existingTask != null) {
+                    existingTask.cancel(false);
+                }
+                java.util.concurrent.ScheduledFuture<?> newTask = scheduler.scheduleAtFixedRate(() -> executePingAndLog(ip), 0, newIntervalSeconds, TimeUnit.SECONDS);
+                scheduledTasks.put(ip, newTask);
+            }
         }
     }
 

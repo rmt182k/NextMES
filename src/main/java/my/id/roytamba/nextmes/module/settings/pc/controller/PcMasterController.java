@@ -42,6 +42,7 @@ public class PcMasterController {
     @FXML private TextField txtIp;
     @FXML private Button btnDetails;
     @FXML private TextField txtSearch;
+    @FXML private TextField txtInterval;
 
     @FXML private TableView<PcModel> tablePc;
     @FXML private TableColumn<PcModel, String> colId;
@@ -116,6 +117,11 @@ public class PcMasterController {
 
         try (FileInputStream fis = new FileInputStream(propFile)) {
             props.load(fis);
+            
+            if (txtInterval != null) {
+                txtInterval.setText(props.getProperty("global.interval", "5"));
+            }
+            
             List<String> ids = props.stringPropertyNames().stream()
                     .filter(k -> k.startsWith("pc.") && k.endsWith(".category"))
                     .map(k -> k.substring(3, k.length() - 9))
@@ -144,6 +150,21 @@ public class PcMasterController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleUpdateInterval(ActionEvent event) {
+        String val = txtInterval.getText().trim();
+        try {
+            int interval = Integer.parseInt(val);
+            if (interval <= 0) throw new NumberFormatException();
+            props.setProperty("global.interval", String.valueOf(interval));
+            savePropertiesToFile();
+            my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService.getInstance().updateInterval("pc", interval);
+            showAlert(Alert.AlertType.INFORMATION, "Sukses", "Interval berhasil diperbarui!");
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Error", "Interval harus berupa angka positif!");
         }
     }
 

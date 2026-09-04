@@ -25,6 +25,7 @@ public class PrinterMasterController {
     @FXML private TextField txtName;
     @FXML private TextField txtIp;
     @FXML private TextField txtSearch;
+    @FXML private TextField txtInterval;
 
     @FXML private TableView<PrinterModel> tablePrinter;
     @FXML private TableColumn<PrinterModel, String> colId;
@@ -90,6 +91,10 @@ public class PrinterMasterController {
         try (FileInputStream fis = new FileInputStream(propFile)) {
             props.load(fis);
             
+            if (txtInterval != null) {
+                txtInterval.setText(props.getProperty("global.interval", "5"));
+            }
+            
             List<String> keys = props.stringPropertyNames().stream()
                     .filter(k -> k.startsWith("printer.") && k.endsWith(".category"))
                     .collect(Collectors.toList());
@@ -104,6 +109,21 @@ public class PrinterMasterController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleUpdateInterval(ActionEvent event) {
+        String val = txtInterval.getText().trim();
+        try {
+            int interval = Integer.parseInt(val);
+            if (interval <= 0) throw new NumberFormatException();
+            props.setProperty("global.interval", String.valueOf(interval));
+            savePropertiesToFile();
+            my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService.getInstance().updateInterval("printer", interval);
+            showAlert(Alert.AlertType.INFORMATION, "Sukses", "Interval berhasil diperbarui!");
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Error", "Interval harus berupa angka positif!");
         }
     }
 

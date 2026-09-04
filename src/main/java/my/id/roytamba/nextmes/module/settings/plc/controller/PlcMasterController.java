@@ -38,6 +38,8 @@ public class PlcMasterController {
     private final ObservableList<PlcModel> plcList = FXCollections.observableArrayList();
     private Properties props = new Properties();
 
+    @FXML private TextField txtInterval;
+
     @FXML
     public void initialize() {
         // Setup Kategori Default
@@ -93,6 +95,11 @@ public class PlcMasterController {
         try (FileInputStream fis = new FileInputStream(propFile)) {
             props.load(fis);
             
+            // Set Interval UI
+            if (txtInterval != null) {
+                txtInterval.setText(props.getProperty("global.interval", "5"));
+            }
+            
             // Ekstrak ID yang valid
             List<String> keys = props.stringPropertyNames().stream()
                     .filter(k -> k.startsWith("plc.") && k.endsWith(".category"))
@@ -108,6 +115,21 @@ public class PlcMasterController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleUpdateInterval(ActionEvent event) {
+        String val = txtInterval.getText().trim();
+        try {
+            int interval = Integer.parseInt(val);
+            if (interval <= 0) throw new NumberFormatException();
+            props.setProperty("global.interval", String.valueOf(interval));
+            savePropertiesToFile();
+            my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService.getInstance().updateInterval("plc", interval);
+            showAlert(Alert.AlertType.INFORMATION, "Sukses", "Interval berhasil diperbarui!");
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Error", "Interval harus berupa angka positif!");
         }
     }
 

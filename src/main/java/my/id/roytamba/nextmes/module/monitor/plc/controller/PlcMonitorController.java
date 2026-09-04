@@ -41,8 +41,6 @@ import my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService;
 public class PlcMonitorController {
 
     @FXML
-    private Spinner<Integer> spinnerInterval;
-    @FXML
     private TextField txtSearch;
     @FXML
     private ComboBox<String> cmbCategory;
@@ -62,13 +60,7 @@ public class PlcMonitorController {
     public void initialize() {
         executorService = Executors.newFixedThreadPool(15);
 
-        // Setup Spinner
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 300, 5);
-        spinnerInterval.setValueFactory(valueFactory);
-        spinnerInterval.valueProperty().addListener((obs, oldVal, newVal) -> {
-            pingIntervalMs = newVal * 1000;
-            restartMonitoring();
-        });
+
 
         // Setup Category Filter
         cmbCategory.getItems().add("Semua");
@@ -112,7 +104,8 @@ public class PlcMonitorController {
             String ip = props.getProperty("plc." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
-                PingHeartbeatService.getInstance().registerIp("plc", ip);
+                int interval = Integer.parseInt(props.getProperty("global.interval", "5"));
+                PingHeartbeatService.getInstance().registerIp("plc", ip, interval);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PlcData(name, ip));
             }
         }

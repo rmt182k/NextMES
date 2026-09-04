@@ -45,6 +45,15 @@
                     <Insets bottom="10.0" top="10.0" />
                 </padding>
             </Button>
+            
+            <VBox spacing="5.0" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 10; -fx-border-radius: 5;">
+                <Label text="Pengaturan Global PLC:" style="-fx-font-weight: bold;" />
+                <Label text="Interval Ping (Detik):" />
+                <HBox spacing="10.0">
+                    <TextField fx:id="txtInterval" prefWidth="80.0" />
+                    <Button onAction="#handleUpdateInterval" text="Update Interval" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand;" />
+                </HBox>
+            </VBox>
         </children>
     </VBox>
 

@@ -40,7 +40,7 @@ import my.id.roytamba.nextmes.module.monitor.service.PingHeartbeatService;
 
 public class PrinterMonitorController {
 
-    @FXML private Spinner<Integer> spinnerInterval;
+
     @FXML private TextField txtSearch;
     @FXML private ComboBox<String> cmbCategory;
     @FXML private VBox mainContainer;
@@ -57,12 +57,6 @@ public class PrinterMonitorController {
     public void initialize() {
         executorService = Executors.newFixedThreadPool(15);
 
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 300, 5);
-        spinnerInterval.setValueFactory(valueFactory);
-        spinnerInterval.valueProperty().addListener((obs, oldVal, newVal) -> {
-            pingIntervalMs = newVal * 1000;
-            restartMonitoring();
-        });
 
         cmbCategory.getItems().add("Semua");
         cmbCategory.getSelectionModel().selectFirst();
@@ -95,7 +89,8 @@ public class PrinterMonitorController {
             String ip = props.getProperty("printer." + idStr + ".ip");
 
             if (cat != null && name != null && ip != null) {
-                PingHeartbeatService.getInstance().registerIp("printer", ip);
+                int interval = Integer.parseInt(props.getProperty("global.interval", "5"));
+                PingHeartbeatService.getInstance().registerIp("printer", ip, interval);
                 categoryMap.computeIfAbsent(cat, k -> new ArrayList<>()).add(new PrinterData(name, ip));
             }
         }
